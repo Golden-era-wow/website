@@ -1,0 +1,22 @@
+parameters:
+  bin_dir: "./vendor/bin"
+  git_dir: "."
+  stop_on_failure: true
+  tasks:
+    phpcs:
+        standard: 'PSR2'
+        ignore_patterns:
+          - /database/(.*)/
+          - /public/(.*)
+    composer:
+      file: ./composer.json
+      no_check_publish: true
+    git_blacklist:
+        keywords:
+          - "die("
+          - "var_dump("
+          - "exit;"
+        triggered_by: ['php']
+        regexp_type: G
+    jsonlint:
+      ignore_patterns: []
