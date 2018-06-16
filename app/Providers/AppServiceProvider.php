@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use CollabCorp\LaravelFeatureToggle\Feature;
+use Laravel\Horizon\Horizon;
 use Illuminate\Support\ServiceProvider;
+use CollabCorp\LaravelFeatureToggle\Feature;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Feature::bind('local', function () {
             return app()->environment('local');
+        });
+
+        Horizon::auth(function ($request) {
+            return optional($request->user())->is_admin;
         });
     }
 }
