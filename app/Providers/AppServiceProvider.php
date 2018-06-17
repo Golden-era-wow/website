@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Laravel\Horizon\Horizon;
+use App\Services\EmulatorManager;
 use Illuminate\Support\ServiceProvider;
 use CollabCorp\LaravelFeatureToggle\Feature;
 
@@ -25,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(EmulatorManager::class, function ($app) {
+            return new EmulatorManager($app);
+        });
+
         Feature::bind('local', function () {
             return app()->environment('local');
         });
