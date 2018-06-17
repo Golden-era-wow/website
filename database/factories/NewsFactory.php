@@ -8,6 +8,6 @@ $factory->define(App\News::class, function (Faker $faker) {
         'photo_url' => $faker->imageUrl(),
         'title' => $faker->bs,
         'summary' => $faker->bs,
-        'body' => $faker->randomHtml()
+        'body' => "#Hello world \n ##{$faker->bs} \n {$faker->text()}"
     ];
 });
