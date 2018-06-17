@@ -74,4 +74,11 @@ interface EmulatorContract
      * @return void
      */
     public function sendItems($recipient, $items, $perMail = 8);
+
+    /**
+     * Determine latency to the server by measuring the time spent on establishing a socket connection to the server
+     *
+     * @return null | integer
+     */
+    public function latency();
 }

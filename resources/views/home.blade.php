@@ -15,7 +15,7 @@
                 @endif
 
                 <p class="lead">
-                   realmlist: game.quazye.me
+                   MOP realmlist: {{ \App\Services\SkyFire::HOST }}
                 </p>
             </div>
         </div>
