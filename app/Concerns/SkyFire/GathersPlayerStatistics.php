@@ -12,7 +12,7 @@ trait GathersPlayerStatistics
      *
      * @return integer
      */
-    public function playerOnline()
+    public function playersOnline()
     {
         return DB::connection('skyfire_auth')
             ->table('account')
@@ -55,7 +55,7 @@ trait GathersPlayerStatistics
     {
         return DB::connection('skyfire_auth')
             ->table('account')
-            ->whereDate('joindate', '<=', Carbon::today()->subMonth()->format('Y-m-d'))
+            ->whereDate('joindate', '>=', Carbon::today()->subMonth()->format('Y-m-d'))
             ->count();
     }
 

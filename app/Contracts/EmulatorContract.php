@@ -34,7 +34,7 @@ interface EmulatorContract
      *
      * @return integer
      */
-    public function playerOnline();
+    public function playersOnline();
 
     /**
      * Get the amount of active players
