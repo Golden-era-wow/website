@@ -38,4 +38,14 @@ class User extends Authenticatable
     {
         return empty($value) ? 'https://www.gravatar.com/avatar/'.md5(Str::lower($this->email)).'.jpg?s=200&d=mm' : url($value);
     }
+
+    /**
+     * Get the game accounts of the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function gameAccounts()
+    {
+        return $this->hasMany(GameAccount::class, 'user_id');
+    }
 }

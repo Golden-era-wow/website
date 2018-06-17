@@ -2,34 +2,92 @@
 
 namespace Tests\Feature\User;
 
-use App\Jobs\CreateGameAccountJob;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Bus;
+use App\User;
 use Tests\TestCase;
+use App\Services\SkyFire;
+use App\Jobs\CreateGameAccountJob;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreatingUsersTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @test
      */
-    public function itDispatchesAJobToRegisterAGameAccountUponRegistration()
+    public function itCreatesAUserAndAGameAccountUponRegistration()
     {
-        Bus::fake();
+        $accountName = $this->faker()->firstName;
+        $email = $this->faker()->email;
 
-        $this->post(
+        $this->postJson(
             '/register',
             [
-            'account_name' => 'john',
+            'account_name' => $accountName,
             'name' => 'John Doe',
-            'email' => 'john@example.com',
+            'email' => $email,
             'password' => 'secret',
             'password_confirmation' => 'secret'
             ]
         )->assertRedirect('/home');
 
-        Bus::assertDispatched(CreateGameAccountJob::class);
+        $this->assertDatabaseHas('users', [
+            'account_name' => $accountName,
+            'name' => 'John Doe',
+            'email' => $email
+        ]);
+
+        $this->assertDatabaseHas('account', [
+            'username' => $accountName,
+            'email' => $email
+        ], 'skyfire_auth');
+
+        $user = User::where('email', $email)->with('gameAccounts')->first();
+        $this->assertNotNull($user->gameAccounts->first()->account_id);
+
+        // Clean up the newly created account on the skyfire_auth database.
+        (new SkyFire)->deleteAccount($user);
+    }
+
+    /**
+     * @test
+     */
+    public function accountNameCannotBeLongerThan16Letters()
+    {
+        $this->json('POST', '/register', [
+            'account_name' => 'jessieIsASexyDevil',
+            'name' => 'Jessie Doe',
+            'email' => 'jessie@example.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ])->assertJsonValidationErrors('account_name');
+
+        $this->assertDatabaseMissing('users', [
+            'account_name' => 'jessieIsASexyDevil',
+            'name' => 'Jessie Doe',
+            'email' => 'jessie@example.com'
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function accountNameCannotContainNumbers()
+    {
+        $this->json('POST', '/register', [
+            'account_name' => 'jessie1234',
+            'name' => 'Jessie Doe',
+            'email' => 'jessie@example.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
+        ])->assertJsonValidationErrors('account_name');
+
+        $this->assertDatabaseMissing('users', [
+            'account_name' => 'jessie1234',
+            'name' => 'Jessie Doe',
+            'email' => 'jessie@example.com'
+        ]);
     }
 }

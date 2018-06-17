@@ -46,12 +46,12 @@ class CreateGameAccountJob implements ShouldQueue
      */
     public function handle()
     {
-        $account = (new SkyFire)->createAccount($this->user, $this->password);
+        $accountId = (new SkyFire)->createAccount($this->user, $this->password);
 
         GameAccount::create(
             [
             'emulator' => 'SkyFire',
-            'account_id' => $account['id'],
+            'account_id' => $accountId,
             'user_id' => $this->user->id,
             ]
         );
