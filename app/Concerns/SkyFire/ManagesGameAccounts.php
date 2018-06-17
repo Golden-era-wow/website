@@ -40,7 +40,7 @@ trait ManagesGameAccounts
      * Find a game account
      *
      * @param User|string $user
-     * @return object
+     * @return \App\GameAccount
      */
     public function findAccount($user)
     {
@@ -50,12 +50,11 @@ trait ManagesGameAccounts
             return $user->gameAccounts()->where('emulator', 'SkyFire')->first();
         }
 
-        return tap(DB::connection('skyfire_auth')->table('account')->where('username', $user->account_name)->firstOrFail(), function ($skyFireAccount) use ($user) {
-            $user->gameAccounts()->create([
-                'emulator' => 'SkyFire',
-                'user_id' => $user->id,
-                'account_id' => $skyFireAccount->id
-            ]);
-        });
+        $skyFireAccount = DB::connection('skyfire_auth')->table('account')->where('username', $user->account_name)->firstOrFail();
+        return $user->gameAccounts()->create([
+            'emulator' => 'SkyFire',
+            'user_id' => $user->id,
+            'account_id' => $skyFireAccount->id
+        ]);
     }
 }
