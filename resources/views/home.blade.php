@@ -5,7 +5,7 @@
     <div class="md:w-1/2 md:mx-auto">
         <div class="rounded shadow">
             <div class="font-medium text-lg text-brand-darker bg-brand-lighter p-3 rounded-t">
-                Dashboard
+                Thanks for signing up.
             </div>
             <div class="bg-white p-3 rounded-b">
                 @if (session('status'))
@@ -14,8 +14,8 @@
                     </div>
                 @endif
 
-                <p class="text-grey-dark text-sm">
-                    You are logged in!
+                <p class="lead">
+                   realmlist: game.quazye.me
                 </p>
             </div>
         </div>
