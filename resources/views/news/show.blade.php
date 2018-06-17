@@ -8,7 +8,7 @@
 
     <h1 class="font-thin mb-4">{{ $news->title }}</h1>
 
-    <p class="text-grey mb-3">Written by {{ $news->creator->name }} on {{ $news->created_at->format('d M y') }}</p>
+    <p class="text-grey mb-3">Written by {{ $news->creator->name }} on {{ $news->created_at->format('d M Y H:i:s') }}</p>
 
     <span class="text-grey-darkest mb-6 leading-normal">
         {{ new \Illuminate\Support\HtmlString((new \Parsedown)->text($news->body)) }}

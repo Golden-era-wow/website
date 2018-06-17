@@ -7,7 +7,7 @@
       <a href="{{ $article->creator->link ?? '#' }}" class="block no-underline text-blue items-center hover:bg-grey-lighter">
         By <span class="font-medium">{{ $article->creator->name }}</span>
       </a>
-      <small class="lead">{{ $article->created_at->diffForHumans() }}</small>
+      <small class="lead">{{ $article->created_at->format('d M Y') }}</small>
       <hr class="border-t border-grey-lighter"></hr>
 
       <article class="py-4 text-grey-darkest">
