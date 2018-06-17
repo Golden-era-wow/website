@@ -23,13 +23,15 @@
             - Create your account!
         </a>
     </div>
-    <hr class="border-t"></hr>
+    @if($news->isNotEmpty())
+        <hr class="border-t"></hr>
 
-    <div class="w-full">
-        <h1 class="font-thin mb-4 text-center">Latest news</h1>
-        @foreach($news as $article)
-            @include('components.news-article-preview', ['article' => $article])
-        @endforeach
-    </div>
+        <div class="w-full">
+            <h1 class="font-thin mb-4 text-center">Latest news</h1>
+            @foreach($news as $article)
+                @include('components.news-article-preview', ['article' => $article])
+            @endforeach
+        </div>
+    @endif
 </div>
 @endsection
