@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Laravel\Horizon\Horizon;
 use App\Services\EmulatorManager;
+use App\Contracts\EmulatorContract;
 use Illuminate\Support\ServiceProvider;
 use CollabCorp\LaravelFeatureToggle\Feature;
 
@@ -28,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(EmulatorManager::class, function ($app) {
             return new EmulatorManager($app);
+        });
+
+        $this->app->bind(EmulatorContract::class, function ($app) {
+            return $app[EmulatorManager::class]->driver();
         });
 
         Feature::bind('local', function () {
