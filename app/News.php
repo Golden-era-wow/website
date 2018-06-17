@@ -18,4 +18,9 @@ class News extends Model
     {
     	return $this->belongsTo(User::class, 'creator_id');
     }
+
+    public function getLinkAttribute()
+    {
+        return route('news.show', $this);
+    }
 }
