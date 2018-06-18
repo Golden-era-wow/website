@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use App\Cart;
+use App\CartItem;
+use App\Policies\CartItemPolicy;
+use App\Policies\CartPolicy;
+use App\Policies\PurchasePolicy;
+use App\Purchase;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +18,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Cart::class => CartPolicy::class,
+        CartItem::class => CartItemPolicy::class,
+        Purchase::class => PurchasePolicy::class
     ];
 
     /**

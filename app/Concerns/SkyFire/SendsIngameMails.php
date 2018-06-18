@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 trait SendsIngameMails
 {
-    protected $mailStationery = [
+    public $mailStationery = [
         'normal' => 41,
         'GM' => 61,
         'auction' => 62
@@ -16,20 +16,18 @@ trait SendsIngameMails
     /**
      * Send the items to the recipient character by ingame mail(s).
      *
-     * @param string  $recipient
+     * @param string $recipientCharacterGuid
      * @param array   $items
      * @param integer $perMail
      *
      * @return void
      */
-    public function sendItems($recipient, $items, $perMail = 8)
+    public function sendItems($recipientCharacterGuid, $items, $perMail = 8)
     {
-        tap(DB::connection('skyfire_characters'), function ($database) use ($recipient, $items, $perMail) {
-            $receiver = $this->findAccount($recipient);
-
+        tap(DB::connection('skyfire_characters'), function ($database) use ($recipientCharacterGuid, $items, $perMail) {
             $mail = $database->table('mail')->insertGetId([
                 'id' => $database->table('mail')->max('id') +1,
-                'receiver' => $receiver->id,
+                'receiver' => $recipientCharacterGuid,
                 'subject' => trans('ingame_mails.items.subject'),
                 'body' => trans('ingame_mails.items.body'),
                 'stationery' => $this->mailStationery['GM'],
@@ -41,11 +39,11 @@ trait SendsIngameMails
 
             Collection::make($items)
                 ->chunk($perMail)
-                ->each(function ($items) use ($mail, $receiver, $database) {
+                ->eachSpread(function ($item) use ($mail, $recipientCharacterGuid, $database) {
                     $database->table('mail_items')->insert([
                         'mail_id' => $mail,
-                        'receiver_id' => $receiver->id,
-                        'item_guid' => $items
+                        'receiver' => $recipientCharacterGuid,
+                        'item_guid' => $item->item_guid
                     ]);
                 });
         });

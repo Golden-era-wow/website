@@ -12,9 +12,20 @@
 */
 
 Route::get('/', 'WelcomeController@index');
+Route::get('news/{news}', 'NewsController@show')->name('news.show');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('news/{news}', 'NewsController@show')->name('news.show');
+    Route::post('carts', 'CartController@store')->name('carts.store');
+
+    Route::post('carts/{cart}/items', 'CartItemController@store')->name('carts.items.store');
+    Route::delete('carts/{cart}/items/{cartItem}', 'CartItemController@destroy')->name('carts.items.destroy');
+
+    Route::post('carts/{cart}/purchase', 'CartPurchaseController@store')->name('carts.purchase.store');
+    Route::post('carts/{cart}/abandon', 'CartAbandonController@store')->name('carts.abandon.store');
+
+    Route::post('purchases/{purchase}/apply', 'PurchaseApplyController@store')->name('purchase.apply.store');
+});
