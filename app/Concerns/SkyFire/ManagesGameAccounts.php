@@ -57,4 +57,24 @@ trait ManagesGameAccounts
             'account_id' => $skyFireAccount->id
         ]);
     }
+
+    /**
+     * Find a character record by their name & account id
+     *
+     * @param string|integer $name
+     * @param integer $accountId
+     * @return object
+     */
+    public function findCharacter($name, $accountId)
+    {
+        if (is_numeric($name)) {
+            return (object)['guid' => $name];
+        }
+
+        return DB::connection('skyfire_characters')
+            ->table('characters')
+            ->where('account', $accountId)
+            ->where('name', $name)
+            ->firstOrfail();
+    }
 }
