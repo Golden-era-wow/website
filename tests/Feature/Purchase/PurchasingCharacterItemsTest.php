@@ -4,6 +4,7 @@ namespace Tests\Feature\Purchase;
 
 use App\CharacterItem;
 use App\Jobs\PurchaseCartJob;
+use App\Product;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -16,13 +17,12 @@ class PurchasingCharacterItemsTest extends TestCase
     public function userCanPurchaseIngameItems()
     {
         $this->actingAs($user = factory(User::class)->create(['balance' => 200]));
-        $items = factory(CharacterItem::class)->times(2)->create(['cost' => 100]);
+        $items = factory(Product::class)->states('gear')->times(2)->create(['cost' => 100]);
 
         $cartId = $this->json('POST', "/carts", [])->assertSuccessful()->json()['id'];
 
         $this->json('POST', "/carts/{$cartId}/items", [
-            'type' => 'App\CharacterItem',
-            'ids' => $items->map->id,
+            'product_ids' => $items->pluck('id'),
         ])->assertSuccessful();
 
         $this->json('POST', "/carts/{$cartId}/purchase", [])->assertSuccessful();
@@ -38,7 +38,7 @@ class PurchasingCharacterItemsTest extends TestCase
     public function cannotPurchaseIngameItemWithInsufficientBalance()
     {
         $this->actingAs($user = factory(User::class)->states('with cart')->create(['balance' => 0]));
-        $item = factory(CharacterItem::class)->create(['cost' => 1]);
+        $item = factory(Product::class)->states('gear')->create(['cost' => 1]);
 
         $user->cart->add($item);
 
@@ -55,8 +55,7 @@ class PurchasingCharacterItemsTest extends TestCase
         $this->actingAs($user = factory(User::class)->states('with cart')->create());
 
         $this->json('POST', "/carts/{$user->cart->id}/items", [
-            'type' => 'App\CharacterItem',
-            'ids' => [1],
-        ])->assertJsonValidationErrors('ids.0');
+            'product_ids' => [1],
+        ])->assertJsonValidationErrors('product_ids.0');
     }
 }

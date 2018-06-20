@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cart;
 use App\CartItem;
 use App\Http\Requests\CartItem\StoreCartItemRequest;
+use App\Product;
 
 class CartItemController extends Controller
 {
@@ -12,15 +13,9 @@ class CartItemController extends Controller
     {
         $this->authorize('create', new CartItem);
 
-        $model = $request->input('type');
-
-        foreach (array_wrap($request->input('ids')) as $id) {
-            $cart->items()->create([
-                'purchasable_type' => $model,
-                'purchasable_id' => $id,
-                'cost' => $model::query()->find($id, ['cost'])->cost
-            ]);
-        }
+        $cart->add(
+            Product::find($request->input('product_ids'))
+        );
 
         return $cart->load('items');
     }

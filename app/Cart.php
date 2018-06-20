@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Product;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,7 +12,7 @@ class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['abandoned', 'purchased', 'purchasable_type', 'purchasable_id', 'user_id', 'deleted_at', 'created_at', 'updated_at'];
+    protected $fillable = ['abandoned', 'purchased', 'user_id', 'deleted_at', 'created_at', 'updated_at'];
 
     protected $casts = [
         'abandoned' => 'boolean',
@@ -47,13 +49,9 @@ class Cart extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function add(Model $item)
+    public function products()
     {
-        return $this->items()->create([
-            'purchasable_type' => get_class($item),
-            'purchasable_id' => $item->getKey(),
-            'cost' => $item->cost ?? 0
-        ]);
+        return $this->hasManyThrough(Product::class, CartItem::class, 'cart_id');
     }
 
     public function items()
@@ -61,14 +59,24 @@ class Cart extends Model
         return $this->hasMany(CartItem::class, 'cart_id');
     }
 
-    public function removeAll(Model $item)
+    public function add($products)
     {
-        $this->items()->purchasable($item)->delete();
+        Collection::wrap($products)->each(function ($product) {
+            $this->items()->create([
+                'product_id' => $product->id,
+                'cost' => $product->cost ?? 0
+            ]);
+        });
     }
 
-    public function remove(Model $item)
+    public function removeAll(Product $product)
     {
-        $this->items()->purchasable($item)->latest()->take(1)->delete();
+        $this->items()->product($product)->delete();
+    }
+
+    public function remove(Product $product)
+    {
+        $this->items()->product($product)->latest()->take(1)->delete();
     }
 
     public function purchase()

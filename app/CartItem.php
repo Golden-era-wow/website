@@ -6,22 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
-    protected $fillable = ['cart_id', 'purchasable_type', 'purchasable_id', 'cost'];
+    protected $fillable = ['cart_id', 'product_id', 'cost'];
 
-    public function scopePurchasable($query, $model)
+    /**
+     * Get the cart slots that holds the given product
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query 
+     * @param  \App\Product $product 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeProduct($query, $product)
     {
-        return $query
-            ->where('purchasable_type', get_class($model))
-            ->where('purchasable_id', $model->getKey());
-    }
+        return $query->where('product_id', $product->id);
+    } 
 
     public function cart()
     {
         return $this->belongsTo(Cart::class, 'cart_id');
     }
 
-    public function purchasable()
+    public function product()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

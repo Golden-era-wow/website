@@ -43,7 +43,7 @@ trait SendsIngameMails
                     $database->table('mail_items')->insert([
                         'mail_id' => $mail,
                         'receiver' => $recipientCharacterGuid,
-                        'item_guid' => $item->item_guid
+                        'item_guid' => $item
                     ]);
                 });
         });

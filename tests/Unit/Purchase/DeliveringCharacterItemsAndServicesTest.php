@@ -2,15 +2,16 @@
 
 namespace Tests\Unit\Purchase;
 
-use App\CharacterItem;
 use App\Jobs\PurchaseApplyJob;
+use App\Jobs\SendCharacterItems;
+use App\Product;
 use App\Purchase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class PurchaseApplyJobTest extends TestCase
+class DeliveringCharacterItemsAndServicesTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,11 +20,8 @@ class PurchaseApplyJobTest extends TestCase
     /** @test */
     public function boughtItemsGetsDeliveredByMail()
     {
-        $this->markTestSkipped('Passes alone, fails in parallel');
-
         $this->actingAs($user = factory(User::class)->states(['with cart', 'with skyfire account'])->create());
-        $item = factory(CharacterItem::class)->create();
-
+        $item = factory(Product::class)->states('gear')->create(['reference' => 1]);
         $user->cart->add($item);
 
         $purchase = factory(Purchase::class)->create(['user_id' => $user->id, 'cart_id' => $user->cart->id]);
@@ -35,7 +33,7 @@ class PurchaseApplyJobTest extends TestCase
             'taximask' => 1
         ]);
 
-        (new PurchaseApplyJob($purchase, $guid, 'SkyFire'))->handle();
+        (new SendCharacterItems($purchase, $guid, 'SkyFire'))->handle();
 
         $this->assertDatabaseHas('mail', [
             'receiver' => $guid,
@@ -45,7 +43,7 @@ class PurchaseApplyJobTest extends TestCase
         ], 'skyfire_characters');
 
         $this->assertDatabaseHas('mail_items', [
-            'item_guid' => $item->item_guid,
+            'item_guid' => $item->reference,
             'receiver' => $guid
         ], 'skyfire_characters');
 

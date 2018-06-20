@@ -26,19 +26,9 @@ class StoreCartItemRequest extends FormRequest
      */
     public function rules()
     {
-        $model = $this->getPurchasableModel();
-
         return [
-            'type' => ['required', 'string', new ValidCartItem],
-            'ids' => ['required', 'array'],
-            'ids.*' => ['required_with:ids', 'integer', Rule::exists($model->getTable(), $model->getKeyName())]
+            'product_ids' => ['required', 'array'],
+            'product_ids.*' => ['required_with:product_ids', 'integer', 'exists:products,id']
         ];
-    }
-
-    public function getPurchasableModel()
-    {
-        $model = Relation::getMorphedModel($this->input('type')) ?? $this->input('type');
-
-        return new $model;
     }
 }

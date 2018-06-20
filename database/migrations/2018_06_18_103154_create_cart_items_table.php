@@ -16,7 +16,8 @@ class CreateCartItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('cart_id')->index();
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade')->onUpdate('cascade');
-            $table->morphs('purchasable');
+            $table->unsignedInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->unsignedInteger('cost')->default(0);
             $table->timestamps();
         });

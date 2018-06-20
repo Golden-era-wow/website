@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Purchase;
 
-use App\CharacterItem;
+use App\Product;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -23,7 +23,7 @@ class PurchasingCartsTest extends TestCase
     public function cannotSubtractBalanceBelowZero()
     {
         $this->actingAs($user = factory(User::class)->states('with cart')->create(['balance' => 0]));
-        $user->cart->add(factory(CharacterItem::class)->create(['cost' => 100]));
+        $user->cart->add(factory(Product::class)->states('gear')->create(['cost' => 100]));
 
         $this->json('POST', "/carts/{$user->cart->id}/purchase", [])->assertStatus(403);
 
@@ -37,7 +37,7 @@ class PurchasingCartsTest extends TestCase
     public function itSubtractsTheTotalCostFromTheUsersBalance()
     {
         $this->actingAs($user = factory(User::class)->states('with cart')->create(['balance' => 100]));
-        $user->cart->add(factory(CharacterItem::class)->create(['cost' => 100]));
+        $user->cart->add(factory(Product::class)->states('gear')->create(['cost' => 100]));
 
         $this->json('POST', "/carts/{$user->cart->id}/purchase", [])->assertSuccessful();
 
@@ -51,7 +51,7 @@ class PurchasingCartsTest extends TestCase
     public function itCreatesAPaymentReference()
     {
         $this->actingAs($user = factory(User::class)->states('with cart')->create(['balance' => 100]));
-        $user->cart->add(factory(CharacterItem::class)->create(['cost' => 100]));
+        $user->cart->add(factory(Product::class)->states('gear')->create(['cost' => 100]));
 
         $this->json('POST', "/carts/{$user->cart->id}/purchase", [])->assertSuccessful();
 
