@@ -13,9 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get(
-    '/user',
-    function (Request $request) {
-        return $request->user();
-    }
-);
+Route::middleware('auth:api')->group(function () {
+	Route::get('current-user', 'API\CurrentUserController@show')->name('api.current-user.show');
+});
