@@ -18,6 +18,7 @@
     <!-- Laravel scripts -->
     <script>
       window.Laravel = <?php echo json_encode([
+        'url' => config('app.url'),
         'apiToken' => Auth::user()->api_token ?? null,
         'algolia_app_id' => config('services.algolia.app_id'),
         'algolia_key' => config('services.algolia.search_key')

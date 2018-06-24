@@ -1,7 +1,7 @@
 <?php
 
-use App\Jobs\CreateGameAccountJob;
 use Faker\Generator as Faker;
+use App\Jobs\CreateGameAccountJob;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +35,12 @@ $factory->afterCreatingState(App\User::class, 'with skyfire account', function (
 $factory->state(App\User::class, 'with cart', []);
 $factory->afterCreatingState(App\User::class, 'with cart', function ($user, $faker) {
     $user->cart()->create(['user_id' => $user->id]);
+});
+
+$factory->state(App\User::class, 'with API access', []);
+$factory->afterCreatingState(App\User::class, 'with API access', function ($user, $faker) {
+    $clients = resolve(\Laravel\Passport\ClientRepository::class);
+    $clients->create($user->id, 'testing', 'http://localhost');
+    $clients->createPersonalAccessClient($user->id, 'testing', 'http://localhost');
+    $user->createToken('testing', []);
 });

@@ -60054,11 +60054,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Tooltip_vue__ = __webpack_require__(383);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Tooltip_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Tooltip_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AppSettingsPassport__ = __webpack_require__(388);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__passport_PersonalAccessTokens_js__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__passport_Clients_js__ = __webpack_require__(392);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__passport_AuthorizedClients__ = __webpack_require__(393);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__passport_AuthorizedClients___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__passport_AuthorizedClients__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__AppSettingsUser__ = __webpack_require__(407);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__AppSettingsPassport__ = __webpack_require__(388);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__passport_PersonalAccessTokens_js__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__passport_Clients_js__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__passport_AuthorizedClients__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__passport_AuthorizedClients___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__passport_AuthorizedClients__);
+
 
 
 
@@ -60067,22 +60069,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 Vue.component('app-settings', {
-       components: {
-              Tab: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tab"], Tabs: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tabs"],
-              Tooltip: __WEBPACK_IMPORTED_MODULE_1__Tooltip_vue___default.a,
-              AppSettingsPassport: __WEBPACK_IMPORTED_MODULE_2__AppSettingsPassport__["a" /* default */],
-              PassportPersonalAccessTokens: __WEBPACK_IMPORTED_MODULE_3__passport_PersonalAccessTokens_js__["a" /* default */],
-              PassportClients: __WEBPACK_IMPORTED_MODULE_4__passport_Clients_js__["a" /* default */],
-              PassportAuthorizedClients: __WEBPACK_IMPORTED_MODULE_5__passport_AuthorizedClients___default.a
-       },
+    components: {
+        Tab: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tab"], Tabs: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tabs"],
+        Tooltip: __WEBPACK_IMPORTED_MODULE_1__Tooltip_vue___default.a,
+        AppSettingsUser: __WEBPACK_IMPORTED_MODULE_2__AppSettingsUser__["a" /* default */],
+        AppSettingsPassport: __WEBPACK_IMPORTED_MODULE_3__AppSettingsPassport__["a" /* default */],
+        PassportPersonalAccessTokens: __WEBPACK_IMPORTED_MODULE_4__passport_PersonalAccessTokens_js__["a" /* default */],
+        PassportClients: __WEBPACK_IMPORTED_MODULE_5__passport_Clients_js__["a" /* default */],
+        PassportAuthorizedClients: __WEBPACK_IMPORTED_MODULE_6__passport_AuthorizedClients___default.a
+    },
 
-       props: { user: Object }
+    props: { user: Object }
 
-       // render: function(createElement) {
-       //     return createElement('div', [
-       //         this.$scopedSlots[0]
-       //     ]);
-       // }
+    // render: function(createElement) {
+    //     return createElement('div', [
+    //         this.$scopedSlots[0]
+    //     ]);
+    // }
 });
 
 /***/ }),
@@ -65971,6 +65974,155 @@ Vue.component('shopping-cart', {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_sweetalert2__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_form_backend_validation_dist_Form__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_form_backend_validation_dist_Form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_form_backend_validation_dist_Form__);
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    props: { user: Object },
+
+    data: function data() {
+        return {
+            form: new __WEBPACK_IMPORTED_MODULE_2_form_backend_validation_dist_Form___default.a({
+                name: '',
+                email: ''
+            })
+        };
+    },
+
+    watch: {
+        handler: function handler(user) {
+            this.form.name = user.name;
+            this.form.email = user.email;
+        },
+
+        immediate: true
+    },
+
+    // mounted: function () {
+    //     this.form.name = this.user.name;
+    //     this.form.email = this.user.email;
+    // },
+
+    methods: {
+        update: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                            case "end":
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function update() {
+                return _ref.apply(this, arguments);
+            }
+
+            return update;
+        }(),
+        destroy: function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                axios.delete('/api/current-user');
+                                axios.post('/logout');
+
+                                window.location = window.Laravel.url;
+
+                            case 3:
+                            case "end":
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this);
+            }));
+
+            function destroy() {
+                return _ref2.apply(this, arguments);
+            }
+
+            return destroy;
+        }(),
+        confirmDestroy: function () {
+            var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee3() {
+                var result;
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                _context3.next = 2;
+                                return __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default()({
+                                    title: 'Are you sure?!',
+                                    text: "Your user & game accounts will no longer to usable!",
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: 'No, keep it'
+                                });
+
+                            case 2:
+                                result = _context3.sent;
+
+
+                                if (result.value) {
+                                    this.destroy();
+
+                                    __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default()({
+                                        title: 'Bye bye beautiful...',
+                                        type: 'info',
+                                        html: "We're so sorry to see you go <i class='fas fa-sad-tear'></i>",
+                                        showCloseButton: true,
+                                        showCancelButton: false
+                                    });
+                                }
+
+                            case 4:
+                            case "end":
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this);
+            }));
+
+            function confirmDestroy() {
+                return _ref3.apply(this, arguments);
+            }
+
+            return confirmDestroy;
+        }()
+    },
+
+    render: function render() {
+        return this.$scopedSlots.default({
+            update: this.update,
+            destroy: this.confirmDestroy
+        });
+    }
+});
 
 /***/ })
 /******/ ]);

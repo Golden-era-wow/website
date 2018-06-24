@@ -14,5 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->group(function () {
-	Route::get('current-user', 'API\CurrentUserController@show')->name('api.current-user.show');
+    Route::get('current-user', 'API\CurrentUserController@show')->name('api.current-user.show');
+    Route::match(['PUT', 'PATCH'], 'current-user', 'API\CurrentUserController@update')->name('api.current-user.update');
+    Route::delete('current-user', 'API\CurrentUserController@destroy')->name('api.current-user.destroy');
 });
