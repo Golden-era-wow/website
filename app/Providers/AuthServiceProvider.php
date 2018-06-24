@@ -9,6 +9,7 @@ use App\Policies\CartPolicy;
 use App\Policies\PurchasePolicy;
 use App\Purchase;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Passport::routes();
+
+        Passport::tokensCan([
+            'search-armory' => 'Search armory',
+            'list-communities' => ' List communities',
+            'create-community-topic' => 'Create a topic in a community board',
+            'reply-community-topic' => 'Reply to a topic within a community board'
+        ]);
     }
 }

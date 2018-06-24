@@ -4,9 +4,12 @@ namespace App;
 
 use App\ProductCategory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {	
+    use Searchable;
+
     protected $fillable = [
     	'category',
     	'type',
@@ -14,11 +17,13 @@ class Product extends Model
     	'cost',
     	'photo_url',
     	'description',
-    	'reference'
+    	'reference',
+        'total_sales'
     ];
 
     protected $casts = [
-    	'cost' => 'integer'
+    	'cost' => 'integer',
+        'total_sales' => 'integer'
     ];
 
     /**
@@ -42,4 +47,24 @@ class Product extends Model
     {
         return $query->where('category', ProductCategory::SERVICE);
     } 
+    
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'category' => $this->category,
+            'type' => $this->type,
+            'cost' => (int)$this->cost,
+            'photo_url' => $this->photo_url,
+            'description' => $this->description,
+
+            'total_sales' => (int)$this->total_sales,
+            'created_at' => $this->created_at->getTimestamp(),
+        ];
+    }
 }

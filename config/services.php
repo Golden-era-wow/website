@@ -42,5 +42,11 @@ return [
 
         'login' => env('SF_USER', 'admin'),
         'password' => env('SF_PASS', 'admin')
+    ],
+
+    'algolia' => [
+        'app_id' => env('ALGOLIA_APP_ID', ''),
+        'search_key' => env('ALGOLIA_SEARCH', ''),
+        'admin_key' => env('ALGOLIA_SECRET', '')
     ]
 ];
