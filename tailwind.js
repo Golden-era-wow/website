@@ -127,27 +127,35 @@ let colors = {
   "pink-lighter": "#ffbbca",
   "pink-lightest": "#ffebef",
 
+  smoke: 'rgba(0, 0, 0, 0.5)',
+  'smoke-darkest': 'rgba(0, 0, 0, 0.9)',
+  'smoke-darker': 'rgba(0, 0, 0, 0.75)',
+  'smoke-dark': 'rgba(0, 0, 0, 0.6)',
+  'smoke-light': 'rgba(0, 0, 0, 0.4)',
+  'smoke-lighter': 'rgba(0, 0, 0, 0.25)',
+  'smoke-lightest': 'rgba(0, 0, 0, 0.1)',
+
   get ["brand-darkest"]() {
-    return this["grey-darkest"];
+    return this["orange-darkest"];
   },
   get ["brand-darker"]() {
-    return this["grey-darker"];
+    return this["orange-darker"];
   },
   get ["brand-dark"]() {
-    return this["grey-dark"];
+    return this["orange-dark"];
   },
   get ["brand"]() {
-    return this["grey"];
+    return this["orange"];
   },
   get ["brand-light"]() {
-    return this["grey-light"];
+    return this["orange-light"];
   },
   get ["brand-lighter"]() {
-    return this["grey-lighter"];
+    return this["orange-lighter"];
   },
   get ["brand-lightest"]() {
-    return this["grey-lightest"];
-  }
+    return this["orange-lightest"];
+  },
 };
 
 module.exports = {
@@ -238,6 +246,7 @@ module.exports = {
       "serif"
     ],
     mono: [
+      "dm",
       "Menlo",
       "Monaco",
       "Consolas",
