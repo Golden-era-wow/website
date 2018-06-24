@@ -10,6 +10,7 @@ export default {
             scopes: this.scopes,
             creatingToken: this.creatingToken,
             createToken: this.showCreateTokenForm,
+            showTokens: this.showTokens,
             store: this.store,
             form: this.form
         });
@@ -55,9 +56,9 @@ export default {
          * Get all of the available scopes.
          */
         async getScopes() {
-           const { data } = await axios.get('/oauth/scopes')
+            const { data } = await axios.get('/oauth/scopes')
 
-           this.scopes = data
+            this.scopes = data
         },
 
         /**
@@ -84,27 +85,16 @@ export default {
         },
 
         /**
-         * Toggle the given scope in the list of assigned scopes.
+         * Show t he users current tokens
          */
-        toggleScope(scope) {
-            if (this.scopeIsAssigned(scope)) {
-                this.form.scopes = this.form.scopes.filter(s => s != scope)
-            } else {
-                this.form.scopes.push(scope);
-            }
-        },
-
-        /**
-         * Determine if the given scope has been assigned to the token.
-         */
-        scopeIsAssigned(scope) {
-            return this.form.scopes.findIndex((s) => s == scope) !== -1;
+        showTokens() {
+            this.creatingToken = false;
         },
 
         /**
          * Show the form for creating new tokens
          */
-        showCreateTokenForm () {
+        showCreateTokenForm() {
             this.creatingToken = true
         },
 

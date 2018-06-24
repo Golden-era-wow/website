@@ -27,7 +27,7 @@ Vue.use(PortalVue);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('dropdown-menu', require('./components/menu/DropdownMenu.vue'));
+Vue.component('dropdown-menu', require('./components/navigation/DropdownMenu.vue'));
 require('./components/settings/AppSettings.js');
 require('./components/shop/ShopIndex.js');
 require('./components/shop/ShoppingCart.js');
@@ -36,21 +36,21 @@ const app = new Vue({
     el: '#app',
     store,
 
-    data () {
-    	return {
-    		user: null
-    	}
+    data() {
+        return {
+            user: null
+        }
     },
 
-    mounted () {
-    	this.fetchCurrentUserWith(['cart']);
+    mounted() {
+        this.fetchCurrentUserWith(['cart']);
     },
 
     methods: {
-    	async fetchCurrentUserWith (relations = []) {
-    		const { data } = await axios.get("/api/current-user", { params: { with: relations } })
+        async fetchCurrentUserWith(relations = []) {
+            const { data } = await axios.get("/api/current-user", { params: { with: relations } })
             this.user = data
-    		this.$store.dispatch('setUser', this.user)
-    	}
+            this.$store.dispatch('setUser', this.user)
+        }
     }
 });
