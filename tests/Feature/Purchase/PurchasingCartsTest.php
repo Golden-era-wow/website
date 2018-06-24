@@ -61,4 +61,21 @@ class PurchasingCartsTest extends TestCase
         ]);
     }
 
+    /** @test */
+    function itIncrementsProductTotalSalesOnPurchase() 
+    {
+        $this->actingAs($user = factory(User::class)->states('with cart')->create(['balance' => 100]));
+        $user->cart->add($product = factory(Product::class)->states('gear')->create([
+            'cost' => 100,
+            'total_sales' => 0
+        ]));
+
+        $this->json('POST', "/carts/{$user->cart->id}/purchase", [])->assertSuccessful();
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'total_sales' => 1
+        ]);
+    } 
+
 }

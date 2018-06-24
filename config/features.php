@@ -13,5 +13,6 @@
     | 
     | You may refer to nested feature toggles using the dot syntax.
     */
-    'armory' => 'local'
+    'armory' => 'local',
+    'shop' => 'local'
 ];

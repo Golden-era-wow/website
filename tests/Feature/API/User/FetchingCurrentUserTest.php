@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\API\User;
 
 use App\Emulator;
 use App\User;

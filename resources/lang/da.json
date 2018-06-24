@@ -4,5 +4,11 @@
     "Account": "Konti",
     "E-Mail Address": "E-mail konti",
     "Password": "Kodeord",
-    "Confirm Password": "Bekræft kodeord"
+    "Confirm Password": "Bekræft kodeord",
+
+    "Add to cart": "Tilføj til indkøbskurven",
+    "Sort by": "Sorter efter",
+    "Products": "Produkter",
+    "Total": "Total",
+    "Buy": "Køb"
 }

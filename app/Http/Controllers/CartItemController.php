@@ -24,6 +24,7 @@ class CartItemController extends Controller
     {
         $this->authorize('delete', $item);
 
-        $item->delete();
+        $item->cart->removeAll($item->product);
+        //$item->delete();
     }
 }

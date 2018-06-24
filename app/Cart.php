@@ -51,7 +51,7 @@ class Cart extends Model
 
     public function products()
     {
-        return $this->hasManyThrough(Product::class, CartItem::class, 'cart_id');
+        return $this->belongsToMany(Product::class, 'cart_items');
     }
 
     public function items()
@@ -85,6 +85,11 @@ class Cart extends Model
             'abandoned' => false,
             'purchased' => true
         ]);
+
+        // $this->products()->increment('total_sales');
+        $this->products()->each(function ($product) {
+            $product->increment('total_sales');
+        });
     }
 
     public function abandon()
