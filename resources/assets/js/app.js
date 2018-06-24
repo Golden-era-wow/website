@@ -9,14 +9,48 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import InstantSearch from 'vue-instantsearch';
+
+Vue.use(InstantSearch);
+
+import store from './vuex/store';
+
+Vue.prototype.$log = console.log;
+
+import PortalVue from 'portal-vue';
+
+Vue.use(PortalVue);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('dropdown-menu', require('./components/menu/DropdownMenu.vue'));
+require('./components/settings/AppSettings.js');
+require('./components/shop/ShopIndex.js');
+require('./components/shop/ShoppingCart.js');
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store,
+
+    data () {
+    	return {
+    		user: null
+    	}
+    },
+
+    mounted () {
+    	this.fetchCurrentUserWith(['cart']);
+    },
+
+    methods: {
+    	async fetchCurrentUserWith (relations = []) {
+    		const { data } = await axios.get("/api/current-user", { params: { with: relations } })
+            this.user = data
+    		this.$store.dispatch('setUser', this.user)
+    	}
+    }
 });
