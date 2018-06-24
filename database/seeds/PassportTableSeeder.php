@@ -13,6 +13,7 @@ class PassportTableSeeder extends Seeder
      */
     public function run(ClientRepository $clients)
     {
+        // Artisan::call('passport:keys');
         // Artisan::call('passport:install');
         // Artisan::call('passport:client', ['--personal' => true]);
         $this->createAuthCodeClient($clients);
