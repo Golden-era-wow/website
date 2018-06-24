@@ -18,9 +18,16 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
-
+    Route::get('settings', 'SettingsController@index')->name('settings.index');
+    
+    Route::get('shop', 'ShopController@index')->name('shop.index');
+    Route::get('shopping-cart', 'ShoppingCartController@show')->name('shopping-cart.index');
     Route::post('carts', 'CartController@store')->name('carts.store');
+    
+    Route::post('carts/{cart}/product/{product}', 'CartProductController@store')->name('carts.product.store');
+    Route::delete('carts/{cart}/product/{product}', 'CartProductController@destroy')->name('carts.product.destroy');
 
+    // Bulk methods
     Route::post('carts/{cart}/items', 'CartItemController@store')->name('carts.items.store');
     Route::delete('carts/{cart}/items/{cartItem}', 'CartItemController@destroy')->name('carts.items.destroy');
 

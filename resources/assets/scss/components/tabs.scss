@@ -1,0 +1,31 @@
+.tabs-component {
+	@apply .overflow-hidden .shadow-lg .border-t-4 .bg-white .mb-4 .rounded-b-lg .rounded-t .border-brand-light .w-full
+}
+
+.tabs-component .is-active {
+    @apply .border-b .border-b-4 .border-brand-light
+}
+
+.tabs-component-tabs {
+	@apply .px-6 .py-4 .mb-2 .mt-4 .mb-8 .flex
+}
+
+.tabs-component-tab {
+	@apply .flex-1 .list-reset .cursor-pointer .border .px-4 .py-2 .text-lg .text-brand-darkest .border .mr-3
+}
+
+.tabs-component-tab:hover {
+	@apply .bg-brand-light
+}
+
+.tabs-component-tab-a {
+	@apply .py-1 .px-3 .pl-2 .no-underline .text-brand-darkest .block
+}
+
+.tabs-component-panels {
+
+}
+
+.tabs-component-panel {
+
+}

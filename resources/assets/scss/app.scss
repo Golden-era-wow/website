@@ -31,6 +31,8 @@
  * @import "components/buttons";
  * @import "components/forms";
  */
+@import "components/tabs";
+@import "components/tooltip";
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your
@@ -56,3 +58,6 @@
  * @import "utilities/background-patterns";
  * @import "utilities/skew-transforms";
  */
+@import "fonts/dank-mono";
+@import "utilities/transitions";
+@import "utilities/margin";
