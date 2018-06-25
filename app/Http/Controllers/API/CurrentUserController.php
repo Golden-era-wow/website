@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\ClientRepository;
@@ -28,8 +29,8 @@ class CurrentUserController extends Controller
     public function update(Request $request)
     {
         $validated = $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users'
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255', 'email', Rule::unique('users', 'email')->ignore($request->user()->id)]
         ]);
 
         return tap($request->user())->update($validated);

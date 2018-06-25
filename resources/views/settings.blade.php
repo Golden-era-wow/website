@@ -5,17 +5,9 @@
         <tabs>
             <tab name="{{ __('User') }}" prefix='<i class="fas fa-user-edit"></i>'>
                 <app-settings-user :user="user">
-                    <div class="shadow" slot-scope="{ update, destroy, form }">
+                    <div class="shadow mb-4 mt-4" slot-scope="{ update, destroy, form }">
                             <div class="border border-brand w-full">
                                 @include('settings.user.details-form')
-
-                                <button @click="update" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-2 px-4 mb-4 rounded">
-                                    {{ __('Update') }}
-                                </button>
-
-                                <button @click="destroy" class="w-full bg-red hover:bg-red-dark text-white font-bold py-2 px-4 mb-4 rounded">
-                                    {{ __('Delete') }}
-                                </button>
                             </div>
                         </div>
                 </app-settings-user>

@@ -32,25 +32,26 @@ require('./components/settings/AppSettings.js');
 require('./components/shop/ShopIndex.js');
 require('./components/shop/ShoppingCart.js');
 
+import { mapGetters } from 'vuex';
+
 const app = new Vue({
     el: '#app',
     store,
 
-    data() {
-        return {
-            user: null
-        }
+    computed: {
+        ...mapGetters([
+            'user',
+        ])
     },
 
-    mounted() {
+    mounted: function () {
         this.fetchCurrentUserWith(['cart']);
     },
 
     methods: {
         async fetchCurrentUserWith(relations = []) {
             const { data } = await axios.get("/api/current-user", { params: { with: relations } })
-            this.user = data
-            this.$store.dispatch('setUser', this.user)
+            this.$store.dispatch('setUser', data)
         }
     }
 });

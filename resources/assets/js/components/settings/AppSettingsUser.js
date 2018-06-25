@@ -14,22 +14,22 @@ export default {
     },
 
     watch: {
-        handler: function (user) {
-            this.form.name = user.name;
-            this.form.email = user.email;
-        },
+        user: {
+            handler: function (user) {
+                if (user) {
+                    this.form.name = user.name;
+                    this.form.email = user.email;
+                }
+            },
 
-        immediate: true
+            immediate: true
+        }
     },
-
-    // mounted: function () {
-    //     this.form.name = this.user.name;
-    //     this.form.email = this.user.email;
-    // },
 
     methods: {
         async update() {
-
+            const user = await this.form.put('/api/current-user')
+            this.$store.dispatch('setUser', user)
         },
 
         async destroy() {
@@ -67,7 +67,8 @@ export default {
     render: function () {
         return this.$scopedSlots.default({
             update: this.update,
-            destroy: this.confirmDestroy
+            destroy: this.confirmDestroy,
+            form: this.form
         });
     }
 };

@@ -31,6 +31,37 @@ class UpdatingCurrentUserTest extends TestCase
     }
 
     /** @test */
+    public function canUpdateMyEmailWithoutChangingIt()
+    {
+        $this->actingAs($user = factory(User::class)->create(['email' => 'james@example.com']), 'api');
+
+        $this->json('PUT', route('api.current-user.update'), [
+            'name' => 'James doe',
+            'email' => 'james@example.com'
+        ])->assertSuccessful();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'James doe',
+            'email' => 'james@example.com'
+        ]);
+    }
+
+    /** @test */
+    public function cannotChangeToAnothersEmail()
+    {
+        factory(User::class)->create(['email' => 'admin@example.com']);
+
+        $this->actingAs($user = factory(User::class)->create(), 'api');
+
+        $this->json('PUT', route('api.current-user.update'), [
+            'email' => 'admin@example.com'
+        ])->assertJsonValidationErrors('email');
+
+        $this->assertDatabaseMissing('users', ['id' => $user->id, 'email' => 'admin@example.com']);
+    }
+
+    /** @test */
     public function canDestroyMyUser()
     {
         $this->actingAs($user = factory(User::class)->states('with API access')->create(), 'api');
@@ -54,17 +85,4 @@ class UpdatingCurrentUserTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function cannotChangeToAnothersEmail()
-    {
-        factory(User::class)->create(['email' => 'admin@example.com']);
-
-        $this->actingAs($user = factory(User::class)->create(), 'api');
-
-        $this->json('PUT', route('api.current-user.update'), [
-            'email' => 'admin@example.com'
-        ])->assertJsonValidationErrors('email');
-
-        $this->assertDatabaseMissing('users', ['id' => $user->id, 'email' => 'admin@example.com']);
-    }
 }
