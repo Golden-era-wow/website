@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class SkyFire implements EmulatorContract
 {
-    const HOST = 'game.quazye.me';
-    const PORT = 8085;
-
     use ManagesGameAccounts, GathersPlayerStatistics, GathersServerStatistics, SendsIngameMails;
 
     public function findGear($id)
@@ -24,19 +21,36 @@ class SkyFire implements EmulatorContract
     	    ->where('entry', $id)
     	    ->first();
     }
+    
+    /**
+     * Get a config value
+     *     
+     * @param  string|null $key 
+     * @return string|array|null      
+     */
+    public function config($key = null)
+    {
+        return array_get(config('services.skyfire'), $key);
+    }
 
     public function characters()
     {
-        return DB::connection('skyfire_characters');
+        return DB::connection(
+            $this->config('db_characters')
+        );
     }
 
     public function auth()
     {
-        return DB::connection('skyfire_auth');
+        return DB::connection(
+            $this->config('db_auth')
+        );
     }
 
     public function world()
     {
-        return DB::connection('skyfire_world');
+        return DB::connection(
+            $this->config('db_world')
+        );
     }
 }

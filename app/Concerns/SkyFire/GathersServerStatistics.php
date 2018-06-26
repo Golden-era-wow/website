@@ -12,7 +12,7 @@ trait GathersServerStatistics
     public function latency()
     {
         $start = microtime(true);
-        $connected = @fsockopen(static::HOST, static::PORT);
+        $connected = @fsockopen($this->config('host'), $this->config('port'));
 
         if (! $connected) {
             return null;

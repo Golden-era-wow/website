@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@inject('emulator', 'App\Contracts\EmulatorContract')
+
 <div class="flex items-center">
     <div class="md:w-1/2 md:mx-auto">
         <div class="rounded shadow">
@@ -15,7 +17,7 @@
                 @endif
 
                 <p class="lead">
-                   MOP realmlist: {{ \App\Services\SkyFire::HOST }}
+                   MOP realmlist: {{ $emulator->config('host') }}
                 </p>
             </div>
         </div>
