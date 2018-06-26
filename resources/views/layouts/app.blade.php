@@ -15,6 +15,31 @@
     {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" async> --}}
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-87DrmpqHRiY8hPLIr7ByqhPIywuSsjuQAfMXAE0sMUpY3BM7nXjf+mLIUSvhDArs" crossorigin="anonymous">
 
+    <script type="text/javascript" src="https://cdn.cavernoftime.com/api/tooltip.js"></script>
+    <script>
+        var CoTTooltips = {
+                /* Enable or disable the rename of URLs into item, spell and other names automatically */
+                rename: true,
+                /* Enable or disable icons appearing on the left of the tooltip links. */
+                icons: true,
+                /* Overrides the default icon size of 15x15, 13x13 as an example, icons must be true */
+                iconsize: 15,
+                /* Enable or disable link rename quality colors, an epic item will be purple for example. */
+                qualitycolor: true,
+                /* TBA */
+                forcexpac: { },
+                /* Override link colors, qualitycolor must be true. Example: spells: '#000' will color all renamed spell links black. */
+                overridecolor: {
+                    spells: '',
+                    items: '',
+                    npcs: '',
+                    objects: '',
+                    quests: '',
+                    achievements: ''
+                }
+        };
+    </script>
+
     <!-- Laravel scripts -->
     <script>
       window.Laravel = <?php echo json_encode([
@@ -62,6 +87,12 @@
                                 <span slot="link" class="text-brand-darker text-sm pr-4 cursor-pointer">{{ Auth::user()->name }}</span>
 
                                 <ul class="list-reset flex flex-col" slot="content">
+                                    <li class="p-4">
+                                        <a class="no-underline hover:underline text-brand-darker text-sm" href="{{ url('home') }}">
+                                            {{ __('Home') }}
+                                        </a>
+                                    </li>
+
                                     <li class="p-4">
                                         <a class="no-underline hover:underline text-brand-darker text-sm" href="{{ url('settings') }}">
                                             {{ __('Settings') }}
