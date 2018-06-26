@@ -18,7 +18,7 @@ trait ManagesGameAccounts
      */
     public function createAccount($user, $password)
     {
-        return DB::connection('skyfire_auth')->table('account')->insertGetId([
+        return $this->auth()->table('account')->insertGetId([
             'username' => $user->account_name,
             'email' => $user->email,
             'sha_pass_hash' => $this->makePassword($user, $password)
@@ -33,7 +33,7 @@ trait ManagesGameAccounts
      */
     public function deleteAccount($user)
     {
-        return DB::connection('skyfire_auth')->table('account')->where('id', $this->findAccount($user)->id)->delete() > 0;
+        return $this->auth()->table('account')->where('id', $this->findAccount($user)->id)->delete() > 0;
     }
 
     /**
@@ -50,7 +50,7 @@ trait ManagesGameAccounts
             return $user->gameAccounts()->where('emulator', 'SkyFire')->first();
         }
 
-        $skyFireAccount = DB::connection('skyfire_auth')->table('account')->where('username', $user->account_name)->firstOrFail();
+        $skyFireAccount = $this->auth()->table('account')->where('username', $user->account_name)->firstOrFail();
         return $user->gameAccounts()->create([
             'emulator' => 'SkyFire',
             'user_id' => $user->id,
@@ -71,7 +71,7 @@ trait ManagesGameAccounts
             return (object)['guid' => $name];
         }
 
-        return DB::connection('skyfire_characters')
+        return $this->characters()
             ->table('characters')
             ->where('account', $accountId)
             ->where('name', $name)

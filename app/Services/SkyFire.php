@@ -18,9 +18,25 @@ class SkyFire implements EmulatorContract
 
     public function findGear($id)
     {
-    	return DB::connection('skyfire_world')
+    	return $this
+            ->world()
     	    ->table('item_template')
     	    ->where('entry', $id)
     	    ->first();
+    }
+
+    public function characters()
+    {
+        return DB::connection('skyfire_characters');
+    }
+
+    public function auth()
+    {
+        return DB::connection('skyfire_auth');
+    }
+
+    public function world()
+    {
+        return DB::connection('skyfire_world');
     }
 }

@@ -24,28 +24,28 @@ trait SendsIngameMails
      */
     public function sendItems($recipientCharacterGuid, $items, $perMail = 8)
     {
-        tap(DB::connection('skyfire_characters'), function ($database) use ($recipientCharacterGuid, $items, $perMail) {
-            $mail = $database->table('mail')->insertGetId([
-                'id' => $database->table('mail')->max('id') +1,
-                'receiver' => $recipientCharacterGuid,
-                'subject' => trans('ingame_mails.items.subject'),
-                'body' => trans('ingame_mails.items.body'),
-                'stationery' => $this->mailStationery['GM'],
-                'has_items' => true,
+        $database = $this->characters();
 
-                'expire_time' => now()->addWeeks(2)->getTimestamp(),
-                'deliver_time' => now()->getTimestamp(),
-            ]);
+        $mail = $database->table('mail')->insertGetId([
+            'id' => $database->table('mail')->max('id') +1,
+            'receiver' => $recipientCharacterGuid,
+            'subject' => trans('ingame_mails.items.subject'),
+            'body' => trans('ingame_mails.items.body'),
+            'stationery' => $this->mailStationery['GM'],
+            'has_items' => true,
 
-            Collection::make($items)
-                ->chunk($perMail)
-                ->eachSpread(function ($item) use ($mail, $recipientCharacterGuid, $database) {
-                    $database->table('mail_items')->insert([
-                        'mail_id' => $mail,
-                        'receiver' => $recipientCharacterGuid,
-                        'item_guid' => $item
-                    ]);
-                });
-        });
+            'expire_time' => now()->addWeeks(2)->getTimestamp(),
+            'deliver_time' => now()->getTimestamp(),
+        ]);
+
+        Collection::make($items)
+            ->chunk($perMail)
+            ->eachSpread(function ($item) use ($mail, $recipientCharacterGuid, $database) {
+                $database->table('mail_items')->insert([
+                    'mail_id' => $mail,
+                    'receiver' => $recipientCharacterGuid,
+                    'item_guid' => $item
+                ]);
+            });
     }
 }

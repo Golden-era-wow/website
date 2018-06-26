@@ -14,7 +14,8 @@ trait GathersPlayerStatistics
      */
     public function playersOnline()
     {
-        return DB::connection('skyfire_auth')
+        return $this
+            ->auth()
             ->table('account')
             ->where('online', '>', 0)
             ->count();
@@ -27,7 +28,8 @@ trait GathersPlayerStatistics
      */
     public function playersActive()
     {
-        return DB::connection('skyfire_auth')
+        return $this
+            ->auth()
             ->table('account')
             ->whereDate('last_login', '>', Carbon::today()->subMonths(6)->format('Y-m-d'))
             ->count();
@@ -40,7 +42,8 @@ trait GathersPlayerStatistics
      */
     public function playersInactive()
     {
-        return DB::connection('skyfire_auth')
+        return $this
+            ->auth()
             ->table('account')
             ->whereDate('last_login', '<=', Carbon::today()->subMonths(6)->format('Y-m-d'))
             ->count();
@@ -53,7 +56,8 @@ trait GathersPlayerStatistics
      */
     public function playersRecentlyCreated()
     {
-        return DB::connection('skyfire_auth')
+        return $this
+            ->auth()
             ->table('account')
             ->whereDate('joindate', '>=', Carbon::today()->subMonth()->format('Y-m-d'))
             ->count();
@@ -66,7 +70,8 @@ trait GathersPlayerStatistics
      */
     public function playersTotal()
     {
-        return DB::connection('skyfire_auth')
+        return $this
+            ->auth()
             ->table('account')
             ->count();
     }
