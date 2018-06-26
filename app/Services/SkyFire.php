@@ -21,7 +21,25 @@ class SkyFire implements EmulatorContract
     	    ->where('entry', $id)
     	    ->first();
     }
-    
+
+    public function guildsByRank()
+    {
+        return $this
+            ->characters()
+            ->table('guild')
+            ->select(['*'])
+            ->selectSub('SELECT count(*) FROM guild_achievement WHERE guild.guildid = guildid', 'guild_achievement_count')
+            ->orderBy('guild_achievement_count', 'desc');
+    }
+
+    public function guildsByLevel()
+    {
+        return $this
+            ->characters()
+            ->table('guild')
+            ->orderBy('level', 'desc');  
+    }
+
     /**
      * Get a config value
      *     
