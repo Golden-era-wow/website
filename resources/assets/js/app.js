@@ -32,6 +32,8 @@ require('./components/settings/AppSettings.js');
 require('./components/shop/ShopIndex.js');
 require('./components/shop/ShoppingCart.js');
 
+Vue.component('armory-index', require('./components/armory/ArmoryIndex.js'));
+
 import { mapGetters } from 'vuex';
 
 const app = new Vue({

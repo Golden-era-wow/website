@@ -13,6 +13,7 @@
 
 Route::get('/', 'WelcomeController@index');
 Route::get('news/{news}', 'NewsController@show')->name('news.show');
+Route::get('armory', 'ArmoryController@index')->name('armory.index');
 
 Auth::routes();
 
