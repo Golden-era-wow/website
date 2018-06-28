@@ -69,7 +69,9 @@ class SyncSearchableGuilds implements ShouldQueue
                     ];
                 });
 
-                $searchIndex->addObjects($guilds->all());
+                if ($guilds->isNotEmpty()) {
+                    $searchIndex->addObjects($guilds->all());
+                }
         }
     }
 }
