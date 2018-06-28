@@ -75,6 +75,13 @@ class SyncSearchableGuilds implements ShouldQueue
                         ->where('guid', $guild->leaderguid)
                         ->first();
 
+                    $realm = $emulator
+                        ->auth()
+                        ->table('realmcharacters')
+                        ->join('realmlist', 'realmlist.id', '=', 'realmid')
+                        ->where('acctid', $guildLeader->account)
+                        ->first();
+
                     $faction = $emulator->faction($guild->faction);
 
                     return [
@@ -83,6 +90,7 @@ class SyncSearchableGuilds implements ShouldQueue
                         'leader' => optional($guildLeader)->name,
                         'faction' => $faction,
                         'faction_banner_url' => Storage::url("factions/{$faction}.png"),
+                        'realm' => optional($realm)->name,
                         'level' => $guild->level,
                         'rank' => $guild->rank,
                         'info' => $guild->info,
