@@ -1,15 +1,11 @@
 import { Tabs, Tab } from 'vue-tabs-component';
 import ArmoryTooltip from './ArmoryTooltip';
-import ArmoryGuildLadder from './ArmoryGuildLadder';
+import ArmoryGuildLadder from './ArmoryGuildLadder.vue';
 
-export default {
-	render: function (createElement) {
-	  return this.$scopedSlots.default({})
-	},
-
+Vue.component('armory-index', {
 	components: { 
 		Tabs, Tab,
 		ArmoryTooltip,
 		ArmoryGuildLadder
 	}
-}
+});

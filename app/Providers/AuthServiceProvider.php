@@ -37,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'search-armory' => 'Search armory',
+            'list-guilds' => 'List ingame guilds',
             'list-communities' => ' List communities',
             'create-community-topic' => 'Create a topic in a community board',
             'reply-community-topic' => 'Reply to a topic within a community board'

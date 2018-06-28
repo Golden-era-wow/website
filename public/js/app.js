@@ -26040,7 +26040,7 @@ __webpack_require__(382);
 __webpack_require__(402);
 __webpack_require__(403);
 
-Vue.component('armory-index', __webpack_require__(408));
+__webpack_require__(408);
 
 
 
@@ -66145,80 +66145,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__ = __webpack_require__(383);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ArmoryTooltip__ = __webpack_require__(413);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder__ = __webpack_require__(409);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder_vue__ = __webpack_require__(417);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder_vue__);
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-	render: function render(createElement) {
-		return this.$scopedSlots.default({});
-	},
-
+Vue.component('armory-index', {
 	components: {
 		Tabs: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tabs"], Tab: __WEBPACK_IMPORTED_MODULE_0_vue_tabs_component__["Tab"],
 		ArmoryTooltip: __WEBPACK_IMPORTED_MODULE_1__ArmoryTooltip__["a" /* default */],
-		ArmoryGuildLadder: __WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder__["a" /* default */]
+		ArmoryGuildLadder: __WEBPACK_IMPORTED_MODULE_2__ArmoryGuildLadder_vue___default.a
 	}
 });
 
 /***/ }),
-/* 409 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination_vue__ = __webpack_require__(410);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Pagination_vue__);
-
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-	components: { Pagination: __WEBPACK_IMPORTED_MODULE_1__Pagination_vue___default.a },
-
-	data: function data() {
-		return {
-			guilds: []
-		};
-	},
-	mounted: function mounted() {
-		this.fetchLatestGuilds();
-	},
-
-
-	methods: {
-		fetchLatestGuilds: function () {
-			var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-				var _axios$get, data;
-
-				return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								_axios$get = axios.get('/api/armory/guilds'), data = _axios$get.data;
-
-							case 1:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
-
-			function fetchLatestGuilds() {
-				return _ref.apply(this, arguments);
-			}
-
-			return fetchLatestGuilds;
-		}()
-	}
-});
-
-/***/ }),
+/* 409 */,
 /* 410 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -66271,14 +66213,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
-
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //
@@ -66308,88 +66244,50 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: {
-		url: {
-			type: String,
+		records: {
+			type: Number,
 			required: true
 		},
 
 		perPage: {
 			type: Number,
 			default: 15
-		},
-
-		scopes: {
-			type: Object,
-			default: function _default() {
-				return {};
-			}
 		}
 	},
 
 	data: function data() {
 		return {
-			page: 0,
-			total: 0
+			page: 0
 		};
 	},
 
 
 	computed: {
 		pages: function pages() {
-			return [].concat(_toConsumableArray(Array(this.total).keys()));
+			return [].concat(_toConsumableArray(Array(this.records).keys()));
 		}
 	},
 
 	methods: {
 		next: function next() {
-			this.fetch(this.page + 1);
+			this.page++;
+
+			this.paginate();
 		},
 		previous: function previous() {
-			this.fetch(this.page - 1);
+			this.page--;
+
+			this.paginate();
 		},
-		fetch: function () {
-			var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(page) {
-				var scopes, _ref2, data;
+		paginate: function paginate() {
+			var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-				return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								scopes = this.scopes;
-
-								scopes['page'] = page;
-
-								_context.next = 4;
-								return axios.get(this.url, { params: scopes });
-
-							case 4:
-								_ref2 = _context.sent;
-								data = _ref2.data;
-
-
-								if ('meta' in data) {
-									this.page = data.meta.current_page;
-									this.total = data.meta.total;
-								} else {
-									this.page = page;
-								}
-
-								this.$emit('data', Object(__WEBPACK_IMPORTED_MODULE_1_lodash__["get"])(data, 'data', data));
-
-							case 8:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
-
-			function fetch(_x) {
-				return _ref.apply(this, arguments);
+			if (page) {
+				this.page = page;
 			}
 
-			return fetch;
-		}()
+			this.$emit('paginate', this.page);
+		}
 	}
 });
 
@@ -66431,7 +66329,7 @@ var render = function() {
               attrs: { href: "#" },
               on: {
                 click: function($event) {
-                  _vm.fetch(number)
+                  _vm.setPage(number)
                 }
               }
             },
@@ -66527,6 +66425,167 @@ if (false) {
 		}
 	}
 });
+
+/***/ }),
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(61)
+/* script */
+var __vue_script__ = __webpack_require__(418)
+/* template */
+var __vue_template__ = __webpack_require__(419)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/armory/ArmoryGuildLadder.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4741f2bd", Component.options)
+  } else {
+    hotAPI.reload("data-v-4741f2bd", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 418 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination_vue__ = __webpack_require__(410);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Pagination_vue__);
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: { Pagination: __WEBPACK_IMPORTED_MODULE_1__Pagination_vue___default.a },
+
+	data: function data() {
+		return {
+			totalGuilds: 0,
+			guilds: []
+		};
+	},
+	mounted: function mounted() {
+		this.fetchGuilds();
+	},
+
+
+	methods: {
+		fetchGuilds: function () {
+			var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+				var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+				var _ref2, data;
+
+				return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+					while (1) {
+						switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return axios.get('/api/guilds', { params: { page: page } });
+
+							case 2:
+								_ref2 = _context.sent;
+								data = _ref2.data;
+
+
+								this.totalGuilds = data.meta.total;
+								this.guilds = data.data;
+
+							case 6:
+							case 'end':
+								return _context.stop();
+						}
+					}
+				}, _callee, this);
+			}));
+
+			function fetchGuilds() {
+				return _ref.apply(this, arguments);
+			}
+
+			return fetchGuilds;
+		}()
+	}
+});
+
+/***/ }),
+/* 419 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm._t("default", null, { guilds: _vm.guilds }),
+      _vm._v(" "),
+      _c("pagination", {
+        attrs: { records: _vm.totalGuilds },
+        on: { paginate: _vm.fetchGuilds }
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4741f2bd", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

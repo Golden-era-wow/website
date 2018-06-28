@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use Laravel\Horizon\Horizon;
-use App\Services\EmulatorManager;
 use App\Contracts\EmulatorContract;
-use Illuminate\Support\ServiceProvider;
+use App\Http\Resources\GuildResource;
+use App\Services\EmulatorManager;
 use CollabCorp\LaravelFeatureToggle\Feature;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        GuildResource::withoutWrapping();
     }
 
     /**

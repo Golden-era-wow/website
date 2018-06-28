@@ -7,7 +7,7 @@
 		</li>
 
 	  	<li v-for="number in pages">
-	  		<a @click="fetch(number)" class="block text-white border-r border-brand px-3 py-2" :class="{ 'bg-brand': number === page }" href="#">
+	  		<a @click="setPage(number)" class="block text-white border-r border-brand px-3 py-2" :class="{ 'bg-brand': number === page }" href="#">
 	  			{{ number }}
 	  		</a>
 	  	</li>
@@ -25,61 +25,49 @@
 
 	export default {
 		props: {
-			url: {
-				type: String,
+			records: {
+				type: Number,
 				required: true
 			},
 
 			perPage: {
 				type: Number,
 				default: 15
-			},
-
-			scopes: {
-				type: Object,
-				default () {
-					return {};
-				}
 			}
 		},
 
 		data () {
 			return {
-				page: 0,
-				total: 0
+				page: 0
 			}
 		},
 
 		computed: {
 			pages () {
-				return [...Array(this.total).keys()];
+				return [...Array(this.records).keys()];
 			}
 		},
 
 		methods: {
 			next () {
-				this.fetch(this.page +1);
+				this.page++;
+
+				this.paginate();
 			},
 
-			previous  () {
-				this.fetch(this.page -1);
+			previous () {
+				this.page--;
+
+				this.paginate();
 			},
 
-			async fetch (page) {
-				let scopes = this.scopes;
-				scopes['page'] = page;
-
-				const { data } = await axios.get(this.url, { params: scopes });
-
-				if ('meta' in data) {
-					this.page = data.meta.current_page;
-					this.total = data.meta.total;
-				} else {
+			paginate (page = null) {
+				if (page) {
 					this.page = page;
 				}
 
-				this.$emit('data', get(data, 'data', data));
-			},
+				this.$emit('paginate', this.page);
+			}
 		}
 	}
 </script>
