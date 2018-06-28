@@ -87,6 +87,7 @@ class SyncSearchableGuilds implements ShouldQueue
                     return [
                         'objectID' => $guild->guildid,
                         'name' => $guild->name,
+                        'link' => url('guilds', $guild->guildid),
                         'leader' => optional($guildLeader)->name,
                         'faction' => $faction,
                         'faction_banner_url' => Storage::url("factions/{$faction}.png"),
