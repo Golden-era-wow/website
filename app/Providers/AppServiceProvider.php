@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Contracts\EmulatorContract;
-use App\Http\Resources\GuildResource;
-use App\Services\EmulatorManager;
-use CollabCorp\LaravelFeatureToggle\Feature;
-use Illuminate\Support\ServiceProvider;
+use AlgoliaSearch\Client as Algolia;
 use Laravel\Horizon\Horizon;
+use App\Services\EmulatorManager;
+use App\Contracts\EmulatorContract;
+use Illuminate\Support\ServiceProvider;
+use CollabCorp\LaravelFeatureToggle\Feature;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        GuildResource::withoutWrapping();
+
     }
 
     /**
@@ -28,6 +28,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(Algolia::class, function ($app) {
+            $config = $app['config'];
+
+            return new Algolia(
+                $config['services.algolia.app_id'],
+                $config['services.algolia.admin_key']
+            );
+        });
+
         $this->app->singleton(EmulatorManager::class, function ($app) {
             return new EmulatorManager($app);
         });

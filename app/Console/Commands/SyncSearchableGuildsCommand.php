@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Jobs\SyncSearchableGuilds;
 
 class SyncSearchableGuildsCommand extends Command
 {
@@ -11,24 +12,14 @@ class SyncSearchableGuildsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'guilds:searchable';
+    protected $signature = 'guilds:searchable {emulator?} {--all}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Make ingame guilds searchable.';
 
     /**
      * Execute the console command.
@@ -37,6 +28,9 @@ class SyncSearchableGuildsCommand extends Command
      */
     public function handle()
     {
-        //
+        dispatch(new SyncSearchableGuilds(
+            $this->argument('emulator'),
+            $this->option('all')
+        ));
     }
 }

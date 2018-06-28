@@ -23,17 +23,31 @@ class SyncSearchableGuilds implements ShouldQueue
     public $emulators = [];
 
     /**
-     * Create a new job instance
+     * Whether we should sync all or only the most recent guilds.
      *
-     * @return void
+     * @var bool
      */
-    public function __construct($emulators = null)
+    public $onlyRecentlyUpdated;
+
+    /**
+     * Create a new job to sync the guilds to Algolia.
+     *
+     * @param array $emulators
+     * @param boolean $onlyRecentlyUpdated
+     */
+    public function __construct($emulators = null, $onlyRecentlyUpdated = true)
     {
-        $this->emulators = Emulator::supported();
+        if ($emulators) {
+            $this->emulators = array_wrap($emulators);
+        } else {
+            $this->emulators = Emulator::supported();
+        }
+
+        $this->onlyRecentlyUpdated = $onlyRecentlyUpdated;
     }
 
     /**
-     * Execute the job.
+     * Send the guilds to Algolia
      *
      * @param \AlgoliaSearch\Client  $algolia
      * @return void
@@ -47,11 +61,14 @@ class SyncSearchableGuilds implements ShouldQueue
 
             $guilds = $emulator
                 ->guilds()
-                ->whereDate('updateDate', '=', Carbon::today()->toDateString())
-                ->whereTime('updateDate', '>=', Carbon::now()->subMinutes(15))
+                ->when($this->onlyRecentlyUpdated, function ($query) {
+                    $query
+                        ->whereDate('updatedDate', '=', Carbon::today()->toDateString())
+                        ->whereTime('updatedDate', '>=', Carbon::now()->subMinutes(15));
+                })
                 ->get()
                 ->map(function ($guild) use ($emulator) {
-                    $emulator
+                    $guildLeader = $emulator
                         ->characters()
                         ->table('characters')
                         ->where('guid', $guild->leaderguid)
@@ -65,7 +82,7 @@ class SyncSearchableGuilds implements ShouldQueue
                         'rank' => $guild->rank,
                         'info' => $guild->info,
                         'created_at' => $guild->createdate,
-                        'updated_at' => $guild->updateDate
+                        'updated_at' => Carbon::parse($guild->updatedDate)->getTimestamp()
                     ];
                 });
 

@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\SyncSearchableGuildsCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\StoreIngamePerformanceIndicatorsCommand;
 
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        StoreIngamePerformanceIndicatorsCommand::class
+        StoreIngamePerformanceIndicatorsCommand::class,
+        SyncSearchableGuildsCommand::class
     ];
 
     /**
@@ -26,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(StoreIngamePerformanceIndicatorsCommand::class)->daily();
+        $schedule->command(SyncSearchableGuildsCommand::class)->everyFifteenMinutes();
     }
 
     /**
