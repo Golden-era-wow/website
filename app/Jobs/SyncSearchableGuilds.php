@@ -48,6 +48,7 @@ class SyncSearchableGuilds implements ShouldQueue
             $guilds = $emulator
                 ->guilds()
                 ->whereDate('updateDate', '=', Carbon::today()->toDateString())
+                ->whereTime('updateDate', '>=', Carbon::now()->subMinutes(15))
                 ->get()
                 ->map(function ($guild) use ($emulator) {
                     $emulator
