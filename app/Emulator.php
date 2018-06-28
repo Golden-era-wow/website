@@ -8,11 +8,28 @@ use Illuminate\Support\Facades\Facade;
 class Emulator extends Facade
 {
     /**
+     * Get an array of supported emulator driver names or check if given is supported
+     *
+     * @param string|null $driver
+     * @return array|bool
+     */
+    public static function supported($driver = null)
+    {
+        $supportedDrivers = static::getSupportedDrivers();
+
+        if ($driver) {
+            return in_array($driver, $supportedDrivers);
+        }
+
+        return $supportedDrivers;
+    }
+
+    /**
      * Get an array of supported emulator driver names
      *
      * @return array
      */
-    public static function supported()
+    public static function getSupportedDrivers()
     {
         $reflection = new \ReflectionClass(static::getFacadeAccessor());
 
@@ -25,7 +42,7 @@ class Emulator extends Facade
             $driver = str_after($method->name, 'create');
 
             return str_before($driver, 'Driver');
-        })->filter()->toArray();
+        })->filter()->values()->toArray();
     }
 
     /**
