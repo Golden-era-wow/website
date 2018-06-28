@@ -17,7 +17,7 @@ class SyncSearchableGuilds implements ShouldQueue
 
     /**
      * The emulators to sync guilds from
-     * 
+     *
      * @var array
      */
     public $emulators = [];
@@ -25,7 +25,7 @@ class SyncSearchableGuilds implements ShouldQueue
     /**
      * Create a new job instance
      *
-     * @return void 
+     * @return void
      */
     public function __construct($emulators = null)
     {
@@ -45,17 +45,18 @@ class SyncSearchableGuilds implements ShouldQueue
         foreach ($this->emulators as $name) {
             $emulator = Emulator::driver($name);
 
-            $emulator
+            $guilds = $emulator
                 ->guilds()
                 ->whereDate('updateDate', '=', Carbon::today()->toDateString())
-                ->each(function ($guild) use ($searchIndex, $emulator) {
+                ->get()
+                ->map(function ($guild) use ($emulator) {
                     $emulator
                         ->characters()
                         ->table('characters')
                         ->where('guid', $guild->leaderguid)
                         ->first();
 
-                    $searchIndex->addObjects([
+                    return [
                         'objectID' => $guild->guildid,
                         'name' => $guild->name,
                         'leader' => optional($guildLeader)->name,
@@ -64,8 +65,10 @@ class SyncSearchableGuilds implements ShouldQueue
                         'info' => $guild->info,
                         'created_at' => $guild->createdate,
                         'updated_at' => $guild->updateDate
-                    ]);
+                    ];
                 });
+
+                $searchIndex->addObjects($guilds->all());
         }
     }
 }
