@@ -22,24 +22,6 @@ class SkyFire implements EmulatorContract
     	    ->first();
     }
 
-    public function guildsByRank()
-    {
-        return $this
-            ->characters()
-            ->table('guild')
-            ->select(['*'])
-            ->selectSub('SELECT count(*) FROM guild_achievement WHERE guild.guildid = guildid', 'guild_achievement_count')
-            ->orderBy('guild_achievement_count', 'desc');
-    }
-
-    public function guildsByLevel()
-    {
-        return $this
-            ->characters()
-            ->table('guild')
-            ->orderBy('level', 'desc');  
-    }
-
     /**
      * Get a config value
      *     
@@ -49,6 +31,15 @@ class SkyFire implements EmulatorContract
     public function config($key = null)
     {
         return array_get(config('services.skyfire'), $key);
+    }
+
+    public function guilds()
+    {
+        return $this
+            ->characters()
+            ->table('guild')
+            ->select(['*'])
+            ->selectSub('SELECT count(*) FROM guild_achievement WHERE guild.guildid = guildid', 'rank');
     }
 
     public function characters()
