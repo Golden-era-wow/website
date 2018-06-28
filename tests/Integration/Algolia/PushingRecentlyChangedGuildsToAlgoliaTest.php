@@ -23,20 +23,22 @@ class PushingRecentlyChangedGuildsToAlgoliaTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->guilds = Emulator::driver('skyfire')->guilds();
+        $this->guilds = Emulator::driver('skyfire')->guilds();;
 	}
 
     /** @test */
     public function itSyncsRecentGuildsToAlgolia()
     {
-		Emulator::driver('skyfire')
-			->characters()
-			->table('characters')
-			->insert([
-				'guid' => 1,
-				'name' => 'John',
-				'taximask' => 0
-			]);
+        Emulator::driver('skyfire')->characters()->table('characters')->insert([
+			'guid' => 1,
+			'name' => 'John',
+			'taximask' => 0
+        ]);
+
+        Emulator::driver('skyfire')->characters()->table('character_reputation')->insert([
+            'guid' => 1,
+            'faction' => 67 // 67 equals Horde
+        ]);
 
 		$this->guilds->insert([
 			'guildid' => 1,
@@ -66,8 +68,8 @@ class PushingRecentlyChangedGuildsToAlgoliaTest extends TestCase
             } while(empty($searchResult));
 
             $this->assertEquals('Flaming monkeys', $searchResult[0]['name']);
+            $this->assertEquals('Horde', $searchResult[0]['faction']);
             $this->assertEquals(1, $searchResult[0]['objectID']);
-
 
             $this->assertEmpty($guilds->search('beer')['hits']);
             // Clean up our mess :)

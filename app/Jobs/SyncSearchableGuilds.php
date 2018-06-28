@@ -2,14 +2,15 @@
 
 namespace App\Jobs;
 
-use AlgoliaSearch\Client;
 use App\Emulator;
+use AlgoliaSearch\Client;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Carbon;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Carbon;
 
 class SyncSearchableGuilds implements ShouldQueue
 {
@@ -74,10 +75,14 @@ class SyncSearchableGuilds implements ShouldQueue
                         ->where('guid', $guild->leaderguid)
                         ->first();
 
+                    $faction = $emulator->faction($guild->faction);
+
                     return [
                         'objectID' => $guild->guildid,
                         'name' => $guild->name,
                         'leader' => optional($guildLeader)->name,
+                        'faction' => $faction,
+                        'faction_banner_url' => Storage::url("factions/{$faction}.png"),
                         'level' => $guild->level,
                         'rank' => $guild->rank,
                         'info' => $guild->info,

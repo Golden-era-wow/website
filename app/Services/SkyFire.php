@@ -24,9 +24,9 @@ class SkyFire implements EmulatorContract
 
     /**
      * Get a config value
-     *     
-     * @param  string|null $key 
-     * @return string|array|null      
+     *
+     * @param  string|null $key
+     * @return string|array|null
      */
     public function config($key = null)
     {
@@ -39,7 +39,24 @@ class SkyFire implements EmulatorContract
             ->characters()
             ->table('guild')
             ->select(['*'])
-            ->selectSub('SELECT count(*) FROM guild_achievement WHERE guild.guildid = guildid', 'rank');
+            ->selectSub('SELECT count(*) FROM guild_achievement WHERE guild.guildid = guildid', 'rank')
+            ->selectSub('SELECT faction FROM character_reputation WHERE guild.leaderguid = guid', 'faction');
+    }
+
+    /**
+     * Get the name for given faction id
+     *
+     * @param integer $id
+     * @return string
+     */
+    public function faction(int $id)
+    {
+        $factions = [
+            67 => 'Horde',
+            469 => 'Alliance'
+        ];
+
+        return $factions[$id] ?? 'Unknown';
     }
 
     public function characters()
