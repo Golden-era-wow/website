@@ -5,6 +5,9 @@ namespace App\Concerns\SkyFire;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @todo refactor this into a class of its own
+**/
 trait SendsIngameMails
 {
     public $mailStationery = [

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Guild;
 use App\Emulator;
 use AlgoliaSearch\Client;
 use Illuminate\Bus\Queueable;
@@ -50,59 +51,20 @@ class SyncSearchableGuilds implements ShouldQueue
     /**
      * Send the guilds to Algolia
      *
-     * @param \AlgoliaSearch\Client  $algolia
      * @return void
      */
-    public function handle(Client $algolia)
+    public function handle()
     {
-        $searchIndex = $algolia->initIndex('guilds');
-
         foreach ($this->emulators as $name) {
             $emulator = Emulator::driver($name);
 
-            $guilds = $emulator
-                ->guilds()
-                ->when($this->onlyRecentlyUpdated, function ($query) {
-                    $query
-                        ->whereDate('updatedDate', '=', Carbon::today()->toDateString())
-                        ->whereTime('updatedDate', '>=', Carbon::now()->subMinutes(15));
-                })
-                ->get()
-                ->map(function ($guild) use ($emulator) {
-                    $guildLeader = $emulator
-                        ->characters()
-                        ->table('characters')
-                        ->where('guid', $guild->leaderguid)
-                        ->first();
-
-                    $realm = $emulator
-                        ->auth()
-                        ->table('realmcharacters')
-                        ->join('realmlist', 'realmlist.id', '=', 'realmid')
-                        ->where('acctid', $guildLeader->account)
-                        ->first();
-
-                    $faction = $emulator->faction($guild->faction);
-
-                    return [
-                        'objectID' => $guild->guildid,
-                        'name' => $guild->name,
-                        'link' => url('guilds', $guild->guildid),
-                        'leader' => optional($guildLeader)->name,
-                        'faction' => $faction,
-                        'faction_banner_url' => Storage::url("factions/{$faction}.png"),
-                        'realm' => optional($realm)->name,
-                        'level' => $guild->level,
-                        'rank' => $guild->rank,
-                        'info' => $guild->info,
-                        'created_at' => $guild->createdate,
-                        'updated_at' => Carbon::parse($guild->updatedDate)->getTimestamp()
-                    ];
-                });
-
-                if ($guilds->isNotEmpty()) {
-                    $searchIndex->addObjects($guilds->all());
-                }
+            Guild::makeWithEmulator($emulator)
+                ->with('leader')
+                ->withRank()
+                ->withFaction()
+                ->when($this->onlyRecentlyUpdated, function ($guilds) {
+                    $guilds->recent();
+                })->searchable();
         }
     }
 }
