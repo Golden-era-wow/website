@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Services\EmulatorManager;
+use App\Emulators\EmulatorManager;
 use Illuminate\Support\Facades\Facade;
 
 class Emulator extends Facade

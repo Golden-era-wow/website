@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Services;
+namespace App\Emulators;
 
-use App\Services\SkyFire;
 use Illuminate\Support\Manager;
 
 class EmulatorManager extends Manager

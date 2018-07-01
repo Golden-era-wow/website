@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\User;
 
+use App\Emulators\SkyFire;
 use App\User;
-use Tests\TestCase;
-use App\Services\SkyFire;
-use App\Jobs\CreateGameAccountJob;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class CreatingUsersTest extends TestCase
 {
@@ -25,11 +23,11 @@ class CreatingUsersTest extends TestCase
         $this->postJson(
             '/register',
             [
-            'account_name' => $accountName,
-            'name' => 'John Doe',
-            'email' => $email,
-            'password' => 'secret',
-            'password_confirmation' => 'secret'
+                'account_name' => $accountName,
+                'name' => 'John Doe',
+                'email' => $email,
+                'password' => 'secret',
+                'password_confirmation' => 'secret'
             ]
         )->assertRedirect('/home');
 

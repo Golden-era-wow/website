@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use AlgoliaSearch\Client as Algolia;
-use Laravel\Horizon\Horizon;
-use App\Services\EmulatorManager;
 use App\Contracts\EmulatorContract;
-use Illuminate\Support\ServiceProvider;
+use App\Emulators\EmulatorManager;
 use CollabCorp\LaravelFeatureToggle\Feature;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
 {

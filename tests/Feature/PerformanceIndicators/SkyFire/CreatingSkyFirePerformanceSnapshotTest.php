@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\PerformanceIndicators\SkyFire;
 
+use App\Emulators\SkyFire;
 use App\Repositories\IngamePerformanceIndicators;
-use App\Services\SkyFire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

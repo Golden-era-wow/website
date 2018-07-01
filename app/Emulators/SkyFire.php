@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Emulators;
 
-use Illuminate\Support\Facades\DB;
-use App\Contracts\EmulatorContract;
-use App\Concerns\SkyFire\SendsIngameMails;
-use Illuminate\Database\ConnectionResolver;
-use App\Concerns\SkyFire\ManagesGameAccounts;
 use App\Concerns\SkyFire\GathersPlayerStatistics;
 use App\Concerns\SkyFire\GathersServerStatistics;
+use App\Concerns\SkyFire\ManagesGameAccounts;
 use App\Concerns\SkyFire\ResolvesDatabaseConnections;
+use App\Concerns\SkyFire\SendsIngameMails;
+use App\Contracts\EmulatorContract;
 
 /**
  * @todo reduce responsibilities
