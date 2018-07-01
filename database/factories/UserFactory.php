@@ -27,6 +27,11 @@ $factory->define(App\User::class, function (Faker $faker) {
     }
 );
 
+$factory->state(App\User::class, 'with game account', []);
+$factory->afterCreatingState(App\User::class, 'with game account', function ($user, $faker) {
+    (new CreateGameAccountJob($user, 'secret'))->handle();
+});
+
 $factory->state(App\User::class, 'with skyfire account', []);
 $factory->afterCreatingState(App\User::class, 'with skyfire account', function ($user, $faker) {
     (new CreateGameAccountJob($user, 'secret', ['SkyFire']))->handle();
