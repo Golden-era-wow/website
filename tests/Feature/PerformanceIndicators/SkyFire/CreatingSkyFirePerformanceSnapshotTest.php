@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\PerformanceIndicators\SkyFire;
 
+use App\Emulators\EmulatorStatistics;
 use App\Emulators\SkyFire;
 use App\Repositories\IngamePerformanceIndicators;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,14 +21,16 @@ class CreatingSkyFirePerformanceSnapshotTest extends TestCase
     {
         parent::setUp();
 
-        $emulator = \Mockery::mock(SkyFire::class);
-        $emulator->makePartial();
+        $emuStats = \Mockery::mock(EmulatorStatistics::class);
+        $emuStats->makePartial();
 
-        $emulator->shouldReceive('latency')->andReturn(100);
-        $emulator->shouldReceive('playersOnline')->andReturn(100);
-        $emulator->shouldReceive('playersTotal')->andReturn(142);
-        $emulator->shouldReceive('playersRecentlyCreated')->andReturn(10);
-        $this->repository = new IngamePerformanceIndicators($emulator);
+        $emuStats->shouldReceive('emulator')->andReturn(new SkyFire);
+        $emuStats->shouldReceive('latency')->andReturn(100);
+        $emuStats->shouldReceive('playersOnline')->andReturn(100);
+        $emuStats->shouldReceive('playersTotal')->andReturn(142);
+        $emuStats->shouldReceive('playersRecentlyCreated')->andReturn(10);
+
+        $this->repository = new IngamePerformanceIndicators($emuStats);
     }
 
     /** @test */

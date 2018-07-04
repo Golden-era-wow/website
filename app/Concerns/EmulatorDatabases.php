@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Contracts\EmulatorContract;
 use App\Emulator;
 
 trait EmulatorDatabases
@@ -9,13 +10,13 @@ trait EmulatorDatabases
     public static function bootEmulatorDatabases()
     {
         static::setConnectionResolver(
-            Emulator::databaseConnectionResolver()
+            Emulator::database()->connectionResolver()
         );
     }
 
     public static function makeWithEmulator(EmulatorContract $emulator, array $attributes = [])
     {
-        static::setConnectionResolver($emulator->databaseConnectionResolver());
+        static::setConnectionResolver($emulator->database()->connectionResolver());
 
         return new static($attributes);
     }

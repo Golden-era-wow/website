@@ -2,29 +2,55 @@
 
 namespace App\Emulators;
 
-use App\Concerns\SkyFire\GathersPlayerStatistics;
-use App\Concerns\SkyFire\GathersServerStatistics;
-use App\Concerns\SkyFire\ManagesGameAccounts;
-use App\Concerns\SkyFire\ResolvesDatabaseConnections;
-use App\Concerns\SkyFire\SendsIngameMails;
 use App\Contracts\EmulatorContract;
+use App\Mail;
 
-/**
- * @todo reduce responsibilities
- * @todo trait methods into contracts
- */
 class SkyFire implements EmulatorContract
 {
-    use ManagesGameAccounts, GathersPlayerStatistics, GathersServerStatistics, ResolvesDatabaseConnections, SendsIngameMails;
+    /**
+     * Get the database capsule instance
+     *
+     * @var EmulatorDatabase
+     */
+    protected $database;
 
     /**
-     * Get a config value
+     * Get a value from the emulators configurations
      *
      * @param  string|null $key
-     * @return string|array|null
+     * @return mixed
      */
     public function config($key = null)
     {
         return array_get(config('services.skyfire'), $key);
+    }
+
+    /**
+     * Get the emulator database connections capsule
+     *
+     * @return EmulatorDatabase
+     */
+    public function database()
+    {
+        if ($this->database) {
+            return $this->database;
+        }
+
+        return $this->database = new EmulatorDatabase($this);
+    }
+
+    public function mail()
+    {
+        return Mail::makeWithEmulator($this);
+    }
+
+    /**
+     * Get the emulator statistics
+     *
+     * @return EmulatorStatistics
+     */
+    public function statistics()
+    {
+        return new EmulatorStatistics($this);
     }
 }

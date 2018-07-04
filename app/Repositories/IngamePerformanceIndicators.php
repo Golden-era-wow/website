@@ -2,27 +2,27 @@
 
 namespace App\Repositories;
 
-use App\Emulator;
+use App\Contracts\Emulators\GathersGameStatistics;
+use App\Emulators\EmulatorStatistics;
 use Illuminate\Support\Facades\DB;
-use App\Contracts\EmulatorContract;
 
 class IngamePerformanceIndicators
 {
     /**
-     * The game emulator we're gathering statistics from
+     * The emulator statistics
      *
-     * @var \App\Contracts\EmulatorContract
+     * @var EmulatorStatistics
      */
-    protected $emulator;
+    protected $statistics;
 
     /**
-     * Create a new Ingame performance indicator repository
+     * IngamePerformanceIndicators constructor.
      *
-     * @param string | EmulatorContract $emulator
+     * @param GathersGameStatistics $statistics
      */
-    public function __construct($emulator)
+    public function __construct(GathersGameStatistics $statistics)
     {
-        $this->emulator = is_string($emulator) ? Emulator::driver($emulator) : $emulator;
+        $this->statistics = $statistics;
     }
 
     /**
@@ -37,11 +37,11 @@ class IngamePerformanceIndicators
 
         DB::table('emulator_performance_indicators')->insert([
             'created_at' => $timestamp,
-            'emulator' => get_class($this->emulator),
-            'latency' => $this->emulator->latency(),
-            'online' => $this->emulator->playersOnline(),
-            'accounts' => $this->emulator->playersTotal(),
-            'newcomers' => $this->emulator->playersRecentlyCreated(),
+            'emulator' => get_class($this->statistics->emulator()),
+            'latency' => $this->statistics->latency(),
+            'online' => $this->statistics->playersOnline(),
+            'accounts' => $this->statistics->playersTotal(),
+            'newcomers' => $this->statistics->playersRecentlyCreated(),
         ]);
     }
 }

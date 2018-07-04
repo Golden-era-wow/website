@@ -2,83 +2,30 @@
 
 namespace App\Contracts;
 
+use App\Emulators\EmulatorDatabase;
+use App\Emulators\EmulatorStatistics;
+
 interface EmulatorContract
 {
     /**
-     * Tell the underlying game server to create an account for given user.
+     * Get a value from the emulators configurations
      *
-     * @param  \App\User $user
-     * @param  string    $password
-     * @return int
+     * @param  string|null $key
+     * @return mixed
      */
-    public function createAccount($user, $password);
+    public function config($key = null);
 
     /**
-     * Delete the skyfire account of given user.
+     * Get the emulator database connections capsule
      *
-     * @param \App\User $user
-     * @return bool
+     * @return EmulatorDatabase
      */
-    public function deleteAccount($user);
+    public function database();
 
     /**
-     * Find a game account
+     * Get the emulator statistics
      *
-     * @param \App\User|string $user
-     * @return \App\GameAccount
+     * @return EmulatorStatistics
      */
-    public function findAccount($user);
-
-    /**
-     * Get the amount of online players
-     *
-     * @return integer
-     */
-    public function playersOnline();
-
-    /**
-     * Get the amount of active players
-     *
-     * @return int
-     */
-    public function playersActive();
-
-    /**
-     * Get the amount of inactive players
-     *
-     * @return int
-     */
-    public function playersInactive();
-
-    /**
-     * Get the amount of players created within last month
-     *
-     * @return int
-     */
-    public function playersRecentlyCreated();
-
-    /**
-     * Get the total amount of game accounts
-     *
-     * @return int
-     */
-    public function playersTotal();
-
-    /**
-     * Send the items to the recipient character by ingame mail(s).
-     *
-     * @param string  $recipient
-     * @param array   $items
-     * @param integer $perMail
-     *
-     * @return void
-     */
-    public function sendItems($recipient, $items, $perMail = 8);
-
-    /**
-     * Determine latency to the server by measuring the time spent on establishing a socket connection to the server
-     *
-     * @return null | integer
-     */
-    public function latency();
+    public function statistics();
 }
