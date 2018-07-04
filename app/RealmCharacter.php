@@ -2,15 +2,19 @@
 
 namespace App;
 
-use App\Realm;
 use App\Concerns\EmulatorDatabases;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class RealmCharacter extends Pivot
 {
     use EmulatorDatabases;
 
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
     /**
      * The connection name for the model.
      *

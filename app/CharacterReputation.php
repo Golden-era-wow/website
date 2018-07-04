@@ -22,4 +22,10 @@ class CharacterReputation extends Model
      * @var string
      */
     protected $table = 'character_reputation';
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

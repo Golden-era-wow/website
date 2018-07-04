@@ -10,6 +10,12 @@ class GuildAchievement extends Model
     use EmulatorDatabases;
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+    /**
      * The connection name for the model.
      *
      * @var string

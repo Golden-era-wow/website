@@ -24,6 +24,12 @@ class Account extends Model
      * @var string
      */
     protected $table = 'account';
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * Find the account(s) for given User

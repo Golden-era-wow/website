@@ -22,6 +22,12 @@ class Character extends Model
      * @var string
      */
     protected $table = 'characters';
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     public function realmCharacter()
     {
