@@ -20,6 +20,12 @@ class Mail extends Model
      */
     public $incrementing = false;
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array
@@ -63,7 +69,7 @@ class Mail extends Model
                 }
 
                 return $mail;
-            });
+            })->each->saveOrFail();
     }
 
     /**
@@ -105,5 +111,15 @@ class Mail extends Model
     public function recipient()
     {
         return $this->belongsTo(Character::class, 'receiver');
+    }
+
+    /**
+     * The mail sender
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sender()
+    {
+        return $this->belongsTo(Character::class, 'sender');
     }
 }

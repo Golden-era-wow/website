@@ -2,8 +2,11 @@
 
 namespace App\Jobs;
 
-use App\Emulator;
+use App\Account;
+use App\Emulators\EmulatorManager;
 use App\GameAccount;
+use App\Hashing\SillySha1;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,11 +18,11 @@ class CreateGameAccountJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The user we're registering an account for.
+     * Integer of the user we're creating an account for.
      *
-     * @var \App\User
+     * @var integer
      */
-    public $user;
+    public $id;
 
     /**
      * The users desired password.
@@ -38,11 +41,13 @@ class CreateGameAccountJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param User $user
+     * @param string $password
+     * @param array $emulators
      */
     public function __construct($user, $password, array $emulators = ['SkyFire'])
     {
-        $this->user = $user;
+        $this->id = $user->id;
         $this->password = $password;
         $this->emulators = $emulators;
     }
@@ -50,18 +55,22 @@ class CreateGameAccountJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @param EmulatorManager $manager
      */
-    public function handle()
+    public function handle(EmulatorManager $manager)
     {
-        foreach ($this->emulators as $emulator) {
-            $accountId = Emulator::driver($emulator)->createAccount($this->user, $this->password);
+        $user = User::query()->findOrFail($this->id);
 
-            GameAccount::create([
-                'emulator' => $emulator,
-                'account_id' => $accountId,
-                'user_id' => $this->user->id
+        foreach ($this->emulators as $emulator) {
+            $account = Account::createWithEmulator($driver = $manager->driver($emulator), [
+                'username' => $user->account_name,
+                'email' => $user->email,
+                'sha_pass_hash' => (new SillySha1)->make($this->password, ['user' => $user])
             ]);
+
+            GameAccount::link($account, $user)
+                ->using($driver)
+                ->save();
         }
     }
 }

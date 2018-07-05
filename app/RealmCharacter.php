@@ -35,6 +35,12 @@ class RealmCharacter extends Pivot
      * @var string
      */
     protected $primaryKey = 'realmid';
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     public function realm()
     {

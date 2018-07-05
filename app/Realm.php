@@ -28,4 +28,10 @@ class Realm extends Model
      * @var string
      */
     protected $table = 'realmlist';
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 }

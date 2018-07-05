@@ -1,7 +1,7 @@
 <?php
 
-use Faker\Generator as Faker;
 use App\Jobs\CreateGameAccountJob;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,12 +29,12 @@ $factory->define(App\User::class, function (Faker $faker) {
 
 $factory->state(App\User::class, 'with game account', []);
 $factory->afterCreatingState(App\User::class, 'with game account', function ($user, $faker) {
-    (new CreateGameAccountJob($user, 'secret'))->handle();
+    app()->call([new CreateGameAccountJob($user, 'secret', ['SkyFire']), 'handle']);
 });
 
 $factory->state(App\User::class, 'with skyfire account', []);
 $factory->afterCreatingState(App\User::class, 'with skyfire account', function ($user, $faker) {
-    (new CreateGameAccountJob($user, 'secret', ['SkyFire']))->handle();
+    app()->call([new CreateGameAccountJob($user, 'secret', ['SkyFire']), 'handle']);
 });
 
 $factory->state(App\User::class, 'with cart', []);

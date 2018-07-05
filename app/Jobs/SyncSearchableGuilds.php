@@ -2,16 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Guild;
 use App\Emulator;
-use AlgoliaSearch\Client;
+use App\Guild;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Carbon;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class SyncSearchableGuilds implements ShouldQueue
 {
@@ -34,7 +31,7 @@ class SyncSearchableGuilds implements ShouldQueue
     /**
      * Create a new job to sync the guilds to Algolia.
      *
-     * @param array $emulators
+     * @param string|array $emulators
      * @param boolean $onlyRecentlyUpdated
      */
     public function __construct($emulators = null, $onlyRecentlyUpdated = true)
@@ -59,9 +56,10 @@ class SyncSearchableGuilds implements ShouldQueue
             $emulator = Emulator::driver($name);
 
             Guild::makeWithEmulator($emulator)
-                ->with('leader')
+                ->with(['leader', 'leader.reputation' => function ($q) {
+                    $q->first();
+                }])
                 ->withRank()
-                ->withFaction()
                 ->when($this->onlyRecentlyUpdated, function ($guilds) {
                     $guilds->recent();
                 })->searchable();

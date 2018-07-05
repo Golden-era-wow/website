@@ -2,10 +2,11 @@
 
 namespace App;
 
-use Laravel\Scout\Searchable;
-use Illuminate\Support\Carbon;
 use App\Concerns\EmulatorDatabases;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Searchable;
 
 class Guild extends Model
 {
@@ -38,6 +39,12 @@ class Guild extends Model
      * @var array
      */
     protected $guarded = [];
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * Get the guilds with rank
@@ -50,26 +57,11 @@ class Guild extends Model
         return $query->withCount('achievements as rank');
     }
 
-    /**
-     * Get guilds with the leaders faction
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function scopeWithFaction($query)
-    {
-        // return $query->with(['leader.reputation' => function ($query) {
-        //     $query->select(['faction']);
-        // }]);
-
-        return $query->selectSub('SELECT faction FROM character_reputation WHERE guild.leaderguid = guid', 'faction');
-    }
-
     public function scopeRecent($query)
     {
         return $query
-            ->whereDate('updatedDate', '=', Carbon::today()->toDateString())
-            ->whereTime('updatedDate', '>=', Carbon::now()->subMinutes(15));
+            ->whereDate('updatedDate', '=', $this->freshTimestamp()->toDateString())
+            ->whereTime('updatedDate', '>=', $this->freshTimestamp()->subMinutes(15));
     }
 
     /**
@@ -79,7 +71,7 @@ class Guild extends Model
      */
     public function achievements()
     {
-        return $this->hasMany(GuildAchievement::class);
+        return $this->hasMany(GuildAchievement::class, 'guildid');
     }
 
     /**
@@ -93,32 +85,28 @@ class Guild extends Model
     }
 
     /**
-     * "cast" the faction id to a name
-     *
-     * @param integer $value
-     * @return string
-     */
-    public function getFactionAttribute($value)
-    {
-        return Faction::name($value);
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray()
     {
-        $realmCharacter = $this->realmCharacter;
+        $leader = $this->leader;
+        /** @var Character $leader */
+        $leader = optional($leader);
+
+        $realmCharacter = $leader->realmCharacter;
         $realm = optional($realmCharacter)->realm;
+
+        $reputation = $leader->reputation()->first();
+        $faction = optional($reputation)->faction;
 
         return [
             'name' => $this->name,
             'link' => url('guilds', $this),
-            'leader' => optional($this->leader)->name,
-            'faction' => $this->faction,
-            'faction_banner_url' => Storage::url("factions/{$this->faction}.png"),
+            'leader' => $leader->name,
+            'faction' => $faction,
+            'faction_banner_url' => Storage::url("factions/{$faction}.png"),
             'realm' => $realm ? $realm->name : 'Unknown',
             'level' => $this->level,
             'rank' => $this->rank,

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Emulators\SkyFire;
+use App\Account;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -46,7 +46,7 @@ class CreatingUsersTest extends TestCase
         $this->assertNotNull($user->gameAccounts->first()->account_id);
 
         // Clean up the newly created account on the skyfire_auth database.
-        (new SkyFire)->deleteAccount($user);
+        Account::query()->whereKey($user->gameAccounts->first()->account_id)->delete();
     }
 
     /**

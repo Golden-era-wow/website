@@ -61,7 +61,7 @@ class SendCharacterItems implements ShouldQueue
             ->gear()
             ->pluck('reference');
 
-        $this->emulator->sendItems(
+        $this->emulator->mail()->sendItems(
             $this->characterId,
             $itemIds
         );

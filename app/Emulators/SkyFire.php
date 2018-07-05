@@ -39,6 +39,11 @@ class SkyFire implements EmulatorContract
         return $this->database = new EmulatorDatabase($this);
     }
 
+    /**
+     * Get a mail model configured with the current emulator
+     *
+     * @return Mail
+     */
     public function mail()
     {
         return Mail::makeWithEmulator($this);

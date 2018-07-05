@@ -4,7 +4,7 @@ namespace App;
 
 class Faction
 {
-    public static function name(int $id)
+    public static function name($id)
     {
         $factions = [
             67 => 'Horde',

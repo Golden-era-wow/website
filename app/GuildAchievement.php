@@ -35,4 +35,10 @@ class GuildAchievement extends Model
      * @var string
      */
     protected $primaryKey = 'guildid';
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 }

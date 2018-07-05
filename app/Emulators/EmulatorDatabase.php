@@ -5,6 +5,7 @@ namespace App\Emulators;
 use App\Contracts\EmulatorContract;
 use App\Contracts\Emulators\ResolvesDatabaseConnections;
 use Illuminate\Database\ConnectionResolver;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class EmulatorDatabase implements ResolvesDatabaseConnections
@@ -17,13 +18,6 @@ class EmulatorDatabase implements ResolvesDatabaseConnections
     protected $emulator;
 
     /**
-     * The database connection resolver for the emulators tables
-     *
-     * @var \Illuminate\Database\ConnectionResolverInterface
-     */
-    protected $connectionResolver;
-
-    /**
      * EmulatorDatabaseConnectionResolver constructor.
      *
      * @param EmulatorContract $emulator
@@ -31,20 +25,55 @@ class EmulatorDatabase implements ResolvesDatabaseConnections
     public function __construct(EmulatorContract $emulator)
     {
         $this->emulator = $emulator;
+
+        $this->registerConfigurations();
+        $this->addConnections();
+    }
+
+    /**
+     * Add the current emulators database configurations
+     *
+     * @return void
+     */
+    public function registerConfigurations()
+    {
+        $connections = config('database.connections');
+
+        $connections['auth'] = $this->emulator->config('db_auth');
+        $connections['characters'] = $this->emulator->config('db_characters');
+        $connections['world'] = $this->emulator->config('db_world');
+
+        config(['database.connections' => $connections]);
+    }
+
+    /**
+     * Extend the emulator database connections into the current connection resolver
+     *
+     * @return void
+     */
+    public function addConnections()
+    {
+        $this->connectionResolver()->extend('auth', function () {
+            return $this->auth();
+        });
+
+        $this->connectionResolver()->extend('characters', function () {
+            return $this->characters();
+        });
+
+        $this->connectionResolver()->extend('world', function () {
+            return $this->world();
+        });
     }
 
     /**
      * Get the database connection resolver
      *
-     * @return \Illuminate\Database\ConnectionResolverInterface
+     * @return \Illuminate\Database\DatabaseManager|\Illuminate\Database\ConnectionResolverInterface
      */
     public function connectionResolver()
     {
-        if ($this->connectionResolver) {
-            return $this->connectionResolver;
-        }
-
-        return $this->connectionResolver = $this->newConnectionResolver();
+        return Model::getConnectionResolver();
     }
 
     /**

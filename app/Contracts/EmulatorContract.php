@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use App\Emulators\EmulatorDatabase;
 use App\Emulators\EmulatorStatistics;
+use App\Mail;
 
 interface EmulatorContract
 {
@@ -21,6 +22,13 @@ interface EmulatorContract
      * @return EmulatorDatabase
      */
     public function database();
+
+    /**
+     * Get a mail model configured with the current emulator
+     *
+     * @return Mail
+     */
+    public function mail();
 
     /**
      * Get the emulator statistics

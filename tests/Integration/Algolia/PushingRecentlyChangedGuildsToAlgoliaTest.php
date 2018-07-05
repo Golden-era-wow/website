@@ -2,86 +2,73 @@
 
 namespace Tests\Feature\Integration\Algolia;
 
-use App\User;
-use App\Emulator;
-use Tests\TestCase;
-use Illuminate\Support\Carbon;
-use App\Jobs\SyncSearchableGuilds;
-use Illuminate\Support\Facades\DB;
 use AlgoliaSearch\Client as Algolia;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Account;
+use App\Character;
+use App\CharacterReputation;
+use App\Guild;
+use App\GuildAchievement;
+use App\Realm;
+use App\RealmCharacter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\SyncSearchToAlgolia;
+use Tests\TestCase;
 
 
 class PushingRecentlyChangedGuildsToAlgoliaTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, SyncSearchToAlgolia;
 
     protected $connectionsToTransact = ['skyfire_characters', 'skyfire_auth'];
 
-	protected $guilds;
-
-	protected function setUp()
-	{
-		parent::setUp();
-
-        $this->guilds = Emulator::driver('skyfire')->guilds();
-	}
-
-    /** @test */
+    /**
+     * @test
+     * @todo refactor into model factories
+     */
     public function itSyncsRecentGuildsToAlgolia()
     {
-        $auth = Emulator::driver('skyfire')->auth();
-        $characters = Emulator::driver('skyfire')->characters();
+        $realm = Realm::create(['name' => 'Test realm']);
 
-        $realmId = $auth->table('realmlist')->insertGetId([
-            'name' => 'Test realm'
-        ]);
-
-        $accountId = $auth->table('account')->insertGetId([
+        $account = Account::create([
             'username' => 'johnDoe',
             'email' => 'john@example.com',
             'sha_pass_hash' => 'secret'
         ]);
 
-        $characters->table('characters')->insert([
-            'guid' => $characterId = $characters->table('characters')->max('guid')+1,
-            'account' => $accountId,
-			'name' => 'John',
-			'taximask' => 0
+        $character = Character::createForAccount($account, [
+            'name' => 'John',
+            'taximask' => 0
         ]);
 
-        $auth->table('realmcharacters')->insert([
-            'realmid' => $realmId,
-            'acctid' => $accountId
+        RealmCharacter::create([
+            'realmid' => $realm->getKey(),
+            'acctid' => $account->getKey(),
         ]);
 
-        $characters->table('character_reputation')->insert([
-            'guid' => $characterId,
+        CharacterReputation::create([
+            'guid' => $character->getKey(),
             'faction' => 67 // 67 equals Horde
         ]);
 
-		$this->guilds->insert([
+        Guild::create([
             'guildid' => 1,
             'level' => 3,
 			'name' => 'Flaming monkeys',
-			'leaderguid' => $characterId,
+            'leaderguid' => $character->getKey(),
 			'info' => 'this is a test guild',
 			'motd' => 'this is a test guild'
         ]);
 
-        $characters->table('guild_achievement')->insert(['guildid' => 1, 'achievement' => 1, 'guids' => '1,2,3,4']);
+        GuildAchievement::create(['guildid' => 1, 'achievement' => 1, 'guids' => '1,2,3,4']);
 
-		$this->guilds->insert([
+        Guild::create([
 			'guildid' => 2,
 			'name' => 'Flying beer monsters',
-			'leaderguid' => $characterId,
+            'leaderguid' => $character->getKey(),
 			'info' => 'this is a test guild',
 			'motd' => 'this is a test guild',
 			'updatedDate' => '2018-04-29'
         ]);
-
-        dispatch(new SyncSearchableGuilds('SkyFire'));
 
         tap($this->app->make(Algolia::class)->initIndex('guilds'), function ($guilds) {
             // No search results?!
