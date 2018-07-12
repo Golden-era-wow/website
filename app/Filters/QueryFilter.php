@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 abstract class QueryFilter implements FilterContract
 {
+    use Validatable, CallsRequestedQueryScopes;
+
     /**
      * The HTTP request containing the users requested filters.
      * 
@@ -74,86 +76,5 @@ abstract class QueryFilter implements FilterContract
                 $this->$method();
             }
         }
-    }
-
-    /**
-     * Apply the filters.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function apply($query)
-    {
-        $this->query = $query;
-
-        foreach ($this->requestedFilters() as $filter => $value) {
-            $this->applyFilter($filter, $value);
-        }
-
-        return $this->query;
-    }
-
-    /**
-     * Get the requested query filters 
-     * 
-     * @return array
-     */
-    public function requestedFilters()
-    {
-        return array_intersect_key(
-            $this->request->input(), 
-            array_flip($this->filters())
-        );
-    }
-
-    /**
-     * filter value using filter.
-     *
-     * @param string $filter
-     * @param mixed  $value
-     *
-     * @return void
-     */
-    private function applyFilter($filter, $value)
-    {
-        if (method_exists($this, $filter)) {
-            $this->$filter($value);
-        } elseif (camel_case($filter) != $filter) {
-            $this->applyFilter(camel_case($filter), $value);
-        }
-    }
-
-    /**
-     * Validate the filters
-     *
-     * @param \Illuminate\Contracts\Validation\Factory $factory
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     * @return \Illuminate\Validation\Validator
-     */
-    public function validate($factory = null)
-    {
-        return tap($this->validator($factory), function ($validator) {
-            $validator->validate();
-        });
-    }
-
-    /**
-     * Add our rules to a given or new validation factory instance.
-     *
-     * @param \Illuminate\Contracts\Validation\Factory $factory
-     * @return \Illuminate\Validation\Validator
-     */
-    public function validator($factory = null)
-    {
-        if (is_null($factory)) {
-            $factory = resolve(ValidationFactory::class);
-        } 
-
-        return $factory->make(
-            $this->request->all(),
-            $this->rules()
-        );
     }
 }
